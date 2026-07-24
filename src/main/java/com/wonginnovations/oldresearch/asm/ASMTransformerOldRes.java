@@ -3,8 +3,7 @@ package com.wonginnovations.oldresearch.asm;
 import com.artur114.bananalib.asm.ASMTransformBus;
 import com.artur114.bananalib.asm.util.IASMLogger;
 import com.artur114.bananalib.mc.asm.ASMLoggerLog4j;
-import com.wonginnovations.oldresearch.asm.transform.BlockTableTransformer;
-import com.wonginnovations.oldresearch.asm.transform.GuiResearchPageTransformer;
+import com.wonginnovations.oldresearch.asm.transform.*;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.MethodVisitor;
@@ -14,13 +13,14 @@ import org.objectweb.asm.util.TraceMethodVisitor;
 
 public class ASMTransformerOldRes implements IClassTransformer {
     public static final String HOOK_CLASS = "com/wonginnovations/oldresearch/asm/ASMHookOldRes";
-    private final ASMLoggerLog4j logger = new ASMLoggerLog4j(LogManager.getLogger("OldResearchUnoff/ASM"));
+    private final ASMLoggerLog4j logger = new ASMLoggerLog4j(LogManager.getLogger("OldResearchReborn/ASM"));
     private final ASMTransformBus bus = new ASMTransformBus();
 
     public ASMTransformerOldRes() {
         this.bus.registerTransformer(
             new BlockTableTransformer(),
-            new GuiResearchPageTransformer()
+            new GuiResearchPageTransformer(),
+            new CommandThaumcraftTransformer()
         );
         this.bus.registerDownListener(((tr, e) -> {
             logger.error("An exception occurred in transformer {}", tr, e);

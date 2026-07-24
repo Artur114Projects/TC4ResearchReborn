@@ -50,7 +50,7 @@ public class OldResCreativeTab extends CreativeTabs {
         ItemStack stack = new ItemStack(InitItems.RESEARCH_NOTE);
         ResearchNoteData data = new ResearchNoteData();
         data.key = "";
-        data.color = Aspect.DARKNESS.getColor();
+        data.color = Aspect.LIFE.getColor();
         ItemResearchNote.setNoteData(stack, data);
         stack.setItemDamage(64);
         return stack;

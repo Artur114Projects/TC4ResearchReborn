@@ -40,6 +40,7 @@ import thaumcraft.api.crafting.IDustTrigger;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.client.gui.GuiResearchPage;
+import thaumcraft.common.lib.CommandThaumcraft;
 import thaumcraft.common.lib.crafting.DustTriggerSimple;
 
 import java.awt.*;
@@ -47,12 +48,10 @@ import java.util.Objects;
 
 public class ManualRegister {
     public void preInit(Side side) {
-        Class<?> clazz = GuiResearchPage.class;
         MinecraftForge.EVENT_BUS.register(this);
         this.initCaps();
         OldResearchManager.initCurios();
         GameRegistry.registerTileEntity(TileResearchTable.class, new ResourceLocation("oldresearch:TileResearchTable"));
-        MinecraftForge.EVENT_BUS.register(OldResearch.INSTANCE);
         this.initNetwork();
     }
 
@@ -71,7 +70,7 @@ public class ManualRegister {
         IDustTrigger.registerDustTrigger(new DustTriggerSimple("", BlocksTC.tableWood, new ItemStack(BlocksTC.researchTable)));
     }
 
-    public void postInitThaum() {
+    public void loadComplete() {
         ResearchCategories.getResearchCategory("BASICS").research.remove("KNOWLEDGETYPES");
         ResearchCategories.getResearchCategory("BASICS").research.remove("THEORYRESEARCH");
         ResearchCategories.getResearchCategory("BASICS").research.remove("CELESTIALSCANNING");
@@ -96,7 +95,7 @@ public class ManualRegister {
         OldResearch.NETWORK.registerMessage(PacketAspectDiscoveryError.class, PacketAspectDiscoveryError.class, discriminator++, Side.CLIENT);
         OldResearch.NETWORK.registerMessage(PacketAspectPlaceToServer.class, PacketAspectPlaceToServer.class, discriminator++, Side.SERVER);
         OldResearch.NETWORK.registerMessage(PacketAspectPool.class, PacketAspectPool.class, discriminator++, Side.CLIENT);
-        OldResearch.NETWORK.registerMessage(PacketGivePlayerNoteToServer.class, PacketGivePlayerNoteToServer.class, discriminator++, Side.SERVER);
+        OldResearch.NETWORK.registerMessage(PacketGivePlayerNoteToServer.HandlerGPN.class, PacketGivePlayerNoteToServer.class, discriminator++, Side.SERVER);
         OldResearch.NETWORK.registerMessage(PacketCopyPlayerNoteToServer.class, PacketCopyPlayerNoteToServer.class, discriminator++, Side.SERVER);
         OldResearch.NETWORK.registerMessage(PacketSyncAspects.HandlerSA.class, PacketSyncAspects.class, discriminator++, Side.CLIENT);
         OldResearch.NETWORK.registerMessage(PacketSyncResearchTableAspects.class, PacketSyncResearchTableAspects.class, discriminator++, Side.CLIENT);

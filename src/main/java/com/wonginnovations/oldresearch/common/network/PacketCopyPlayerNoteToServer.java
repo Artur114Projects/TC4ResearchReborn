@@ -3,7 +3,6 @@ package com.wonginnovations.oldresearch.common.network;
 import com.wonginnovations.oldresearch.api.OldResearchApi;
 import com.wonginnovations.oldresearch.common.items.ItemResearchNote;
 import com.wonginnovations.oldresearch.main.OldResearch;
-import com.wonginnovations.oldresearch.common.OldResearchUtils;
 import com.wonginnovations.oldresearch.common.init.InitItems;
 import com.wonginnovations.oldresearch.common.research.ResearchNoteData;
 import com.wonginnovations.oldresearch.common.tiles.TileResearchTable;
@@ -25,6 +24,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.lib.SoundsTC;
+import thaumcraft.common.lib.utils.InventoryUtils;
 
 public class PacketCopyPlayerNoteToServer implements IMessage, IMessageHandler<PacketCopyPlayerNoteToServer, IMessage> {
     private long pos;
@@ -69,7 +69,7 @@ public class PacketCopyPlayerNoteToServer implements IMessage, IMessageHandler<P
                     player.sendMessage(new TextComponentString("§c" + I18n.format("tile.researchtable.noink.1")));
                     failed = true;
                 }
-                if (!OldResearchUtils.isPlayerCarrying(player, Items.PAPER)) {
+                if (!InventoryUtils.isPlayerCarryingAmount(player, new ItemStack(Items.PAPER), true)) {
                     player.sendMessage(new TextComponentString("§c" + I18n.format("researchnote.missing.paper")));
                     failed = true;
                 }
@@ -82,7 +82,7 @@ public class PacketCopyPlayerNoteToServer implements IMessage, IMessageHandler<P
                 }
                 if (!failed) {
                     ((TileResearchTable) te).consumeInkFromTable();
-                    OldResearchUtils.consumeInventoryItem(player, Items.PAPER);
+                    InventoryUtils.consumePlayerItem(player, new ItemStack(Items.PAPER), false, true);
 
                     for (Aspect aspect : data.aspects.getAspects()) {
                         if (OldResearchApi.oldResStorage(player).aspectCount(aspect) >= 1) {

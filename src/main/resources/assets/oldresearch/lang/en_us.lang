@@ -19,6 +19,8 @@ tc.addaspectpool=Gained %s research point(s) for %s
 tc.discoveryerror=To understand this you need to study %s.
 tc.unknownobject=Nothing can be learned from this.
 tc.researchtheory=%s Theory
+tile.researchtable.need.paper=Paper required to create research notes.
+tile.researchtable.need.st=Scribing tools required to create research notes.
 #
 tc.inventoryscan.scanning=Scanning
 tc.inventoryscan.tooltip=Inventory Scanning available

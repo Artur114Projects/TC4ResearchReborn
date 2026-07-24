@@ -12,7 +12,6 @@ import thaumcraft.common.config.ConfigItems;
 
 @Mixin(value = ConfigItems.class, remap = false)
 public abstract class ConfigItemsMixin {
-
     @Redirect(method = "initItems", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/registries/IForgeRegistry;register(Lnet/minecraftforge/registries/IForgeRegistryEntry;)V", ordinal = 1))
     private static void instantiateItemCurio(IForgeRegistry<Item> instance, IForgeRegistryEntry<Item> iForgeRegistryEntry) {
         ItemsTC.curio = new ItemCurio();

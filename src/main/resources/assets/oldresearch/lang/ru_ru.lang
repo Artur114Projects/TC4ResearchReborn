@@ -18,6 +18,8 @@ tc.addaspectpool=Получено очков исследования %s для 
 tc.discoveryerror=Чтобы понять это, нужно изучить %s.
 tc.unknownobject=Из этого ничего нельзя извлечь.
 tc.researchtheory=Теория: %s
+tile.researchtable.need.paper=Для создания заметки нужна бумага.
+tile.researchtable.need.st=Для создания заметки нужны письменные принадлежности.
 #
 tc.inventoryscan.scanning=Сканирование
 tc.inventoryscan.tooltip=Доступно сканирование инвентаря

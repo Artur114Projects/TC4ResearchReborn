@@ -23,8 +23,10 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.items.IScribeTools;
+import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchStage;
 import thaumcraft.client.gui.GuiResearchPage;
+import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.lib.utils.InventoryUtils;
 
 import java.awt.*;
@@ -46,7 +48,7 @@ public class ASMHookOldRes {
     }
 
     public static void hookAetherResearchInit() {
-        OldResearch.MANUAL_REGISTER.postInitThaum();
+
     }
 
     public static boolean hookInKnowAspect(Aspect aspect, int id) {
@@ -66,7 +68,11 @@ public class ASMHookOldRes {
     public static boolean hookMouseClicked(Map<Point, ItemStack> notePoints, int mx, int my) {
         for (Point p : notePoints.keySet()) {
             if ((mx >= p.x && mx <= p.x + 16) && (my >= p.y && my <= p.y + 16)) {
-                OldResearch.NETWORK.sendToServer(new PacketGivePlayerNoteToServer(Objects.requireNonNull(notePoints.get(p).getTagCompound()).getString("key")));
+                if (!OldResearchManager.playerHasInc(Minecraft.getMinecraft().player, true)) {
+                    Minecraft.getMinecraft().displayGuiScreen(null);
+                } else {
+                    OldResearch.NETWORK.sendToServer(new PacketGivePlayerNoteToServer(Objects.requireNonNull(notePoints.get(p).getTagCompound()).getString("key")));
+                }
                 return true;
             }
         }
@@ -94,7 +100,7 @@ public class ASMHookOldRes {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft mc = Minecraft.getMinecraft();
         ItemStack loc = OldResearchManager.noteStack(key);
-        String s = I18n.format("tc.researchtheory", I18n.format("research." + OldResearchManager.getStrippedKey(key) + ".title"));
+        String s = I18n.format("tc.researchtheory", ResearchCategories.getResearch(OldResearchManager.getStrippedKey(key)).getLocalizedName());
 
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();

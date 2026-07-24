@@ -1,5 +1,6 @@
 package com.wonginnovations.oldresearch.common.research;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,19 +12,21 @@ import java.util.stream.Collectors;
 import com.wonginnovations.oldresearch.api.OldResearchApi;
 import com.wonginnovations.oldresearch.common.research.curio.BaseCurio;
 import com.wonginnovations.oldresearch.common.research.curio.RitesCurio;
-import com.wonginnovations.oldresearch.common.OldResearchUtils;
 import com.wonginnovations.oldresearch.common.items.ItemResearchNote;
 import com.wonginnovations.oldresearch.common.init.InitItems;
 import com.wonginnovations.oldresearch.core.mixin.ResearchManagerAccessor;
+import com.wonginnovations.oldresearch.main.OldResearch;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -34,7 +37,9 @@ import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategory;
 import thaumcraft.api.research.ResearchEntry;
 import thaumcraft.api.research.ResearchStage;
+import thaumcraft.common.lib.SoundsTC;
 import thaumcraft.common.lib.utils.HexUtils;
+import thaumcraft.common.lib.utils.InventoryUtils;
 
 public class OldResearchManager {
     protected static final Map<String, ItemStack> NOTES = new HashMap<>();
@@ -43,7 +48,7 @@ public class OldResearchManager {
     public static ArrayList<BaseCurio> CURIOS = new ArrayList<>();
     public static final Map<Aspect, Integer> ASPECT_COMPLEXITY = new HashMap<>();
     public static IResearchComplexity RESEARCH_COMPLEXITY_FUNCTION = new DefaultResearchComplexity();
-    private static final Random RANDOM = new Random(69420);
+    private static final Random RANDOM = new Random();
 
     public static void registerNotePattern(ResearchNotePattern pattern) {
         NOTE_PATTERNS.put(pattern.oldResKey(), pattern);
@@ -61,6 +66,46 @@ public class OldResearchManager {
         for (Aspect aspect : Aspect.aspects.values()) {
             ASPECT_COMPLEXITY.put(aspect, computeAspectComplexity(aspect, 0));
         }
+    }
+
+    public static void patchResearch() {
+        for (ResearchCategory category : ResearchCategories.researchCategories.values()) {
+            for (ResearchEntry entry : category.research.values()) {
+                ResearchStage[] stages = entry.getStages();
+                for (int i = 0; i != stages.length; i++) {
+                    ResearchStage stage = stages[i];
+
+                    if (stage == null || stage.getKnow() == null) {
+                        continue;
+                    }
+
+                    int theoryCount = 0;
+                    for (ResearchStage.Knowledge knowledge : stage.getKnow()) {
+                        if (knowledge.type == IPlayerKnowledge.EnumKnowledgeType.THEORY) {
+                            theoryCount++;
+                        }
+                    }
+
+                    stage.setKnow(null);
+
+                    if (theoryCount == 0) {
+                        continue;
+                    }
+
+                    String key = "rn_" + entry.getKey() + "_" + i;
+                    stage.setResearch(ArrayUtils.add(stage.getResearch(), key));
+                    NOTES.put(key, createNote(key, theoryCount));
+
+                    if (stage.getResearchIcon() == null) {
+                        stage.setResearchIcon(new String[] {null});
+                    } else {
+                        stage.setResearchIcon(ArrayUtils.add(stage.getResearchIcon(), null));
+                    }
+                }
+            }
+        }
+
+        //TODO: Додать логирование
     }
 
     private static int computeAspectComplexity(Aspect aspect, int depth) {
@@ -113,44 +158,6 @@ public class OldResearchManager {
         return selected;
     }
 
-    public static void patchResearch() {
-        for (ResearchCategory category : ResearchCategories.researchCategories.values()) {
-            for (ResearchEntry entry : category.research.values()) {
-                ResearchStage[] stages = entry.getStages();
-                for (int i = 0; i != stages.length; i++) {
-                    ResearchStage stage = stages[i];
-
-                    if (stage == null || stage.getKnow() == null) {
-                        continue;
-                    }
-
-                    int theoryCount = 0;
-                    for (ResearchStage.Knowledge knowledge : stage.getKnow()) {
-                        if (knowledge.type == IPlayerKnowledge.EnumKnowledgeType.THEORY) {
-                            theoryCount++;
-                        }
-                    }
-
-                    stage.setKnow(null);
-
-                    if (theoryCount == 0) {
-                        continue;
-                    }
-
-                    String key = "rn_" + entry.getKey() + "_" + i;
-                    stage.setResearch(ArrayUtils.add(stage.getResearch(), key));
-                    NOTES.put(key, createNote(key, theoryCount));
-
-                    if (stage.getResearchIcon() == null) {
-                        stage.setResearchIcon(new String[] {null});
-                    } else {
-                        stage.setResearchIcon(ArrayUtils.add(stage.getResearchIcon(), null));
-                    }
-                }
-            }
-        }
-    }
-
     private static ItemStack createNote(String key, int teoriesCount) {
         ItemStack note = new ItemStack(InitItems.RESEARCH_NOTE);
         ResearchNoteData data = new ResearchNoteData();
@@ -185,18 +192,48 @@ public class OldResearchManager {
     }
 
     public static void givePlayerResearchNote(World world, EntityPlayer player, String key) {
-        if (!hasResearchNote(player, key) && (player.isCreative() || (consumeInkFromPlayer(player, false) && OldResearchUtils.consumeInventoryItem(player, Items.PAPER)))) {
-            consumeInkFromPlayer(player, true);
-
-            ItemStack note = noteStack(key);
-            ItemResearchNote.setNoteData(note, computeNoteData(world, key));
-
-            if (!player.inventory.addItemStackToInventory(note)) {
-                ForgeHooks.onPlayerTossEvent(player, note, false);
-            }
-
-            player.inventoryContainer.detectAndSendChanges();
+        if (hasResearchNote(player, key)) {
+            return;
         }
+        if (!player.isCreative() && (!consumeInkFromPlayer(player, false) || !InventoryUtils.consumePlayerItem(player, new ItemStack(Items.PAPER), false, true))) {
+            return;
+        }
+
+        ItemStack note = noteStack(key);
+
+        if (note == null) {
+            return;
+        }
+
+        consumeInkFromPlayer(player, true);
+        ItemResearchNote.setNoteData(note, computeNoteData(world, key));
+
+        if (!player.inventory.addItemStackToInventory(note)) {
+            ForgeHooks.onPlayerTossEvent(player, note, false);
+        }
+
+        player.inventoryContainer.detectAndSendChanges();
+        world.playSound(null, player.posX, player.posY, player.posZ, SoundsTC.learn, SoundCategory.PLAYERS, 0.75F, 1.0F);
+    }
+
+    public static boolean playerHasInc(EntityPlayer player, boolean sendMessage) {
+        if (player.isCreative()) {
+            return true;
+        }
+        if (!BananaMC.inventoryContains(player, (stack) -> stack.getItem() instanceof IScribeTools)) {
+            if (sendMessage) player.sendMessage(new TextComponentString("§c" + I18n.format("tile.researchtable.need.st")));
+            return false;
+        }
+        if (!BananaMC.inventoryContains(player, Items.PAPER)) {
+            if (sendMessage) player.sendMessage(new TextComponentString("§c" + I18n.format("tile.researchtable.need.paper")));
+            return false;
+        }
+        if (!OldResearchManager.consumeInkFromPlayer(player, false)) {
+            if (sendMessage) player.sendMessage(new TextComponentString("§c" + I18n.format("tile.researchtable.noink.0")));
+            if (sendMessage) player.sendMessage(new TextComponentString("§c" + I18n.format("tile.researchtable.noink.1")));
+            return false;
+        }
+        return true;
     }
 
     public static ResearchNoteData computeNoteData(World world, String key) {

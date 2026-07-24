@@ -5,6 +5,7 @@ import com.wonginnovations.oldresearch.common.research.storage.IOldResStorage;
 import com.wonginnovations.oldresearch.main.OldResearch;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -128,6 +129,7 @@ public class CommandOldResearch extends CommandBase {
         }
     }
 
+    @Override
     public @NotNull List<String> getTabCompletions(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         switch (args.length) {
             case 1:
