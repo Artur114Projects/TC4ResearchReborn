@@ -42,7 +42,7 @@ public class OldResearchPattParser {
         } catch (Exception e) {
             log.error("failed to parse file {}", location, e);
         }
-        log.info("Loaded {} note patterns from file {}", patterns.size(), location);
+        log.info("Loaded {} note patterns from {}", patterns.size(), location);
         return patterns;
     }
 

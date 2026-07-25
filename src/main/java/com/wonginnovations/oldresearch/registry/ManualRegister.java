@@ -1,17 +1,15 @@
 package com.wonginnovations.oldresearch.registry;
 
 import com.artur114.bananalib.mc.cap.BananaCapStorage;
-import com.artur114.bananalib.util.graphs.BananaGraphs;
 import com.wonginnovations.oldresearch.api.OldResearchApi;
+import com.wonginnovations.oldresearch.common.items.ItemCurio;
 import com.wonginnovations.oldresearch.common.research.curio.BaseCurio;
 import com.wonginnovations.oldresearch.client.renderer.TileResearchTableRenderer;
 import com.wonginnovations.oldresearch.common.container.OldResearchGuiHandler;
 import com.wonginnovations.oldresearch.common.init.InitBlocks;
 import com.wonginnovations.oldresearch.common.init.InitItems;
-import com.wonginnovations.oldresearch.common.items.ItemResearchNote;
 import com.wonginnovations.oldresearch.common.network.*;
 import com.wonginnovations.oldresearch.common.research.OldResearchManager;
-import com.wonginnovations.oldresearch.common.research.ResearchNoteData;
 import com.wonginnovations.oldresearch.common.research.storage.IOldResStorage;
 import com.wonginnovations.oldresearch.common.research.storage.OldResStorage;
 import com.wonginnovations.oldresearch.common.tiles.TileResearchTable;
@@ -39,8 +37,6 @@ import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.crafting.IDustTrigger;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
-import thaumcraft.client.gui.GuiResearchPage;
-import thaumcraft.common.lib.CommandThaumcraft;
 import thaumcraft.common.lib.crafting.DustTriggerSimple;
 
 import java.awt.*;
@@ -49,10 +45,9 @@ import java.util.Objects;
 public class ManualRegister {
     public void preInit(Side side) {
         MinecraftForge.EVENT_BUS.register(this);
-        this.initCaps();
-        OldResearchManager.initCurios();
-        GameRegistry.registerTileEntity(TileResearchTable.class, new ResourceLocation("oldresearch:TileResearchTable"));
+        GameRegistry.registerTileEntity(TileResearchTable.class, Objects.requireNonNull(InitBlocks.RESEARCH_TABLE.getRegistryName()));
         this.initNetwork();
+        this.initCaps();
     }
 
     public void midInit(Side side) {
@@ -74,7 +69,7 @@ public class ManualRegister {
         ResearchCategories.getResearchCategory("BASICS").research.remove("KNOWLEDGETYPES");
         ResearchCategories.getResearchCategory("BASICS").research.remove("THEORYRESEARCH");
         ResearchCategories.getResearchCategory("BASICS").research.remove("CELESTIALSCANNING");
-        OldResearchManager.parseJsonResearch(new ResourceLocation("oldresearch", "research.json"));
+        OldResearchManager.loadJsonResearchDirect(OldResearch.loc("research.json"));
         OldResearchManager.patchResearch();
         OldResearchManager.computeAspectComplexity();
         this.initImplicitResLinks();
@@ -133,8 +128,7 @@ public class ManualRegister {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void registerModels(ModelRegistryEvent e) {
-        int i = 0;
-        for (BaseCurio curio : OldResearchManager.CURIOS) ModelLoader.setCustomModelResourceLocation(ItemsTC.curio, i++, new ModelResourceLocation(curio.getTexture().toString()));
+        ((ItemCurio) ItemsTC.curio).registerModels();
         ModelLoader.setCustomModelResourceLocation(InitBlocks.RESEARCH_TABLE.item, 0, new ModelResourceLocation(Objects.requireNonNull(InitBlocks.RESEARCH_TABLE.item.getRegistryName()), "inventory"));
         InitItems.RESEARCH_NOTE.registerModels();
     }

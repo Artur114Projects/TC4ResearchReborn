@@ -20,7 +20,11 @@ public class ASMTransformerOldRes implements IClassTransformer {
         this.bus.registerTransformer(
             new BlockTableTransformer(),
             new GuiResearchPageTransformer(),
-            new CommandThaumcraftTransformer()
+            new CommandThaumcraftTransformer(),
+            new ConfigItemsTransformer(),
+            new ScanGenericTransformer(),
+            new ItemThaumometerTransformer(),
+            new RenderEventHandlerTransformer()
         );
         this.bus.registerDownListener(((tr, e) -> {
             logger.error("An exception occurred in transformer {}", tr, e);

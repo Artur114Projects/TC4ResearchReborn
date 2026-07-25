@@ -1,20 +1,23 @@
 package com.wonginnovations.oldresearch.common.research;
 
 import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.bananalib.util.graphs.BananaGraphs;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.wonginnovations.oldresearch.api.OldResearchApi;
-import com.wonginnovations.oldresearch.common.research.curio.BaseCurio;
-import com.wonginnovations.oldresearch.common.research.curio.RitesCurio;
+import com.wonginnovations.oldresearch.asm.Reflector;
+import com.wonginnovations.oldresearch.common.config.OldConfig;
 import com.wonginnovations.oldresearch.common.items.ItemResearchNote;
 import com.wonginnovations.oldresearch.common.init.InitItems;
-import com.wonginnovations.oldresearch.core.mixin.ResearchManagerAccessor;
 import com.wonginnovations.oldresearch.main.OldResearch;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,13 +34,13 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
-import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.items.IScribeTools;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategory;
 import thaumcraft.api.research.ResearchEntry;
 import thaumcraft.api.research.ResearchStage;
 import thaumcraft.common.lib.SoundsTC;
+import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.lib.utils.HexUtils;
 import thaumcraft.common.lib.utils.InventoryUtils;
 
@@ -45,9 +48,7 @@ public class OldResearchManager {
     protected static final Map<String, ItemStack> NOTES = new HashMap<>();
     private static final Map<String, List<String>> IMPLICIT_PARENTS = new HashMap<>();
     private static final Map<String, ResearchNotePattern> NOTE_PATTERNS = new HashMap<>();
-    public static ArrayList<BaseCurio> CURIOS = new ArrayList<>();
     public static final Map<Aspect, Integer> ASPECT_COMPLEXITY = new HashMap<>();
-    public static IResearchComplexity RESEARCH_COMPLEXITY_FUNCTION = new DefaultResearchComplexity();
     private static final Random RANDOM = new Random();
 
     public static void registerNotePattern(ResearchNotePattern pattern) {
@@ -69,11 +70,15 @@ public class OldResearchManager {
     }
 
     public static void patchResearch() {
+        int patchedStages = 0;
+        int patchedResearches = 0;
         for (ResearchCategory category : ResearchCategories.researchCategories.values()) {
             for (ResearchEntry entry : category.research.values()) {
                 ResearchStage[] stages = entry.getStages();
+                patchedResearches++;
                 for (int i = 0; i != stages.length; i++) {
                     ResearchStage stage = stages[i];
+                    patchedStages++;
 
                     if (stage == null || stage.getKnow() == null) {
                         continue;
@@ -105,7 +110,23 @@ public class OldResearchManager {
             }
         }
 
-        //TODO: Додать логирование
+        OldResearch.LOGGER.info("#################################################");
+        OldResearch.LOGGER.info("#         Welcome to Old Research: Reborn!      #");
+        OldResearch.LOGGER.info("#       Patched {} stages in {} researches    #", parseInt(patchedStages), parseInt(patchedResearches));
+        OldResearch.LOGGER.info("#         And created {} research notes        #", parseInt(NOTES.size()));
+        OldResearch.LOGGER.info("#################################################");
+    }
+
+    private static String parseInt(int i) {
+        String p = i + "";
+        switch (p.length()) {
+            case 1:
+                return " " + p + " ";
+            case 2:
+                return " " + p;
+            default:
+                return p;
+        }
     }
 
     private static int computeAspectComplexity(Aspect aspect, int depth) {
@@ -188,7 +209,27 @@ public class OldResearchManager {
     }
 
     public static int getResearchComplexity(String key) {
-        return RESEARCH_COMPLEXITY_FUNCTION.calculateComplexity(key);
+        AtomicInteger ret = new AtomicInteger();
+        BananaGraphs.bfs(OldResearchManager.getStrippedKey(key), OldResearchManager::parentsOfResearch, (res) -> {
+            ResearchEntry research = ResearchCategories.getResearch(res);
+            if (research != null) {
+                for (ResearchStage stage : research.getStages()) {
+                    if (stage == null || stage.getResearch() == null) {
+                        continue;
+                    }
+                    int comp = 0;
+                    for (String s : stage.getResearch()) {
+                        if (s.startsWith("rn_")) {
+                            comp += OldResearchManager.NOTES.get(s).getTagCompound().getInteger("mergedTeories");
+                        }
+                    }
+                    ret.addAndGet(comp);
+                }
+            }
+
+            return false;
+        });
+        return (int) ((ret.get() + 1) * OldConfig.researchDifficultyMultiplier);
     }
 
     public static void givePlayerResearchNote(World world, EntityPlayer player, String key) {
@@ -266,26 +307,19 @@ public class OldResearchManager {
         return data;
     }
 
-    public static boolean consumeInkFromPlayer(EntityPlayer player, boolean doit) {
-        ItemStack[] inv = player.inventory.mainInventory.toArray(new ItemStack[0]);
-
-        for (ItemStack itemStack : inv) {
-            if (itemStack != null && itemStack.getItem() instanceof IScribeTools && itemStack.getItemDamage() < itemStack.getMaxDamage()) {
-                if (doit) {
-                    itemStack.damageItem(1, player);
-                }
-
+    public static boolean consumeInkFromPlayer(EntityPlayer player, boolean doIt) {
+        for (ItemStack stack : player.inventory.mainInventory) {
+            if (stack != null && stack.getItem() instanceof IScribeTools && stack.getItemDamage() < stack.getMaxDamage()) {
+                if (doIt) stack.damageItem(1, player);
                 return true;
             }
         }
-
         return false;
     }
 
     public static boolean hasResearchNote(EntityPlayer player, String key) {
-        ItemStack[] inv = player.inventory.mainInventory.toArray(new ItemStack[0]);
-        for (ItemStack itemStack : inv) {
-            if (itemStack != null && itemStack.getItem() == InitItems.RESEARCH_NOTE && ItemResearchNote.noteData(itemStack) != null && ItemResearchNote.noteData(itemStack).key.equals(key)) {
+        for (ItemStack stack : player.inventory.mainInventory) {
+            if (stack != null && stack.getItem() == InitItems.RESEARCH_NOTE && stack.getTagCompound() != null && stack.getTagCompound().getString("key").equals(key)) {
                 return true;
             }
         }
@@ -293,8 +327,7 @@ public class OldResearchManager {
     }
 
     public static String getStrippedKey(ItemStack stack) {
-        ResearchNoteData data = ItemResearchNote.noteData(stack);
-        return (data != null)? getStrippedKey(data.key) : null;
+        return (stack.getTagCompound() != null)? getStrippedKey(stack.getTagCompound().getString("key")) : null;
     }
 
     public static String getStrippedKey(String key) {
@@ -373,7 +406,7 @@ public class OldResearchManager {
         return null;
     }
 
-    public static void parseJsonResearch(ResourceLocation loc) {
+    public static void loadJsonResearchDirect(ResourceLocation loc) {
         JsonParser parser = new JsonParser();
         String s = "/assets/" + loc.getNamespace() + "/" + loc.getPath();
         InputStream stream = OldResearchManager.class.getResourceAsStream(s);
@@ -387,9 +420,9 @@ public class OldResearchManager {
                 for (JsonElement element : entries) {
                     try {
                         JsonObject entry = element.getAsJsonObject();
-                        ResearchEntry researchEntry = ResearchManagerAccessor.parseResearchJson(entry);
+                        ResearchEntry researchEntry = Reflector.invokeMethod(ResearchManager.class, null, "parseResearchJson", new Class<?>[] {JsonObject.class}, new Object[] {entry});
                         if (researchEntry != null && ResearchCategories.getResearchCategory(researchEntry.getCategory()) != null) {
-                            ResearchManagerAccessor.addResearchToCategory(researchEntry);
+                            Reflector.invokeMethod(ResearchManager.class, null, "addResearchToCategory", new Class<?>[] {ResearchEntry.class}, new Object[] {researchEntry});
                         }
                         a++;
                     } catch (Exception var13) {
@@ -404,19 +437,6 @@ public class OldResearchManager {
         } else {
             Thaumcraft.log.warn("Research file not found: {}", loc);
         }
-    }
-
-    public static void initCurios() {
-        CURIOS.add((new BaseCurio("arcane")).setCategory("AUROMANCY"));
-        CURIOS.add((new BaseCurio("preserved")).setCategory("ALCHEMY"));
-        CURIOS.add((new BaseCurio("ancient")).setCategory("GOLEMANCY"));
-        CURIOS.add((new BaseCurio("eldritch")).setCategory("ELDRITCH").setWarp(IPlayerWarp.EnumWarpType.NORMAL, 1).setWarp(IPlayerWarp.EnumWarpType.TEMPORARY, 5));
-        CURIOS.add((new BaseCurio("knowledge")).setCategory("INFUSION"));
-        CURIOS.add((new BaseCurio("twisted")).setCategory("ARTIFICE"));
-        CURIOS.add(new RitesCurio());
-        BaseCurio basic = new BaseCurio("basic");
-        for (Aspect aspect : Aspect.getPrimalAspects()) basic.aspect(aspect, 15);
-        CURIOS.add(basic);
     }
 
     public static class HexEntry {

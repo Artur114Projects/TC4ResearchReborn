@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.common.lib.research.ResearchManager;
 
 public class PacketAspectCombinationToServer implements IMessage, IMessageHandler<PacketAspectCombinationToServer, IMessage> {
     private int dim;
@@ -77,7 +78,7 @@ public class PacketAspectCombinationToServer implements IMessage, IMessageHandle
                 EntityPlayerMP player = ctx.getServerHandler().player;
                 if (world != null && player != null) {
                     if (message.aspect1 != null) {
-                        Aspect combo = OldResearchManager.getCombinationResult(message.aspect1, message.aspect2);
+                        Aspect combo = ResearchManager.getCombinationResult(message.aspect1, message.aspect2);
                         if ((OldResearchApi.oldResStorage(player).aspectCount(message.aspect1) > 0 || message.ab1) && (OldResearchApi.oldResStorage(player).aspectCount(message.aspect2) > 0 || message.ab2)) {
                             TileEntity rt = player.world.getTileEntity(new BlockPos(message.x, message.y, message.z));
                             if(OldResearchApi.oldResStorage(player).aspectCount(message.aspect1) <= 0 && message.ab1) {

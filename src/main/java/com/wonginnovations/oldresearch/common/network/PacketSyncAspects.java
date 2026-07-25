@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketSyncAspects extends NBTPacketBase {
     public PacketSyncAspects() {}
@@ -16,6 +18,7 @@ public class PacketSyncAspects extends NBTPacketBase {
 
     public static class HandlerSA implements IMessageHandler<PacketSyncAspects, IMessage> {
         @Override
+        @SideOnly(Side.CLIENT)
         public IMessage onMessage(PacketSyncAspects message, MessageContext ctx) {
             Minecraft mc = Minecraft.getMinecraft();
             mc.addScheduledTask(() -> OldResearchApi.oldResStorage(mc.player).deserializeNBT(message.nbt));

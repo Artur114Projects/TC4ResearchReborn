@@ -2,10 +2,12 @@ package com.wonginnovations.oldresearch.asm;
 
 import com.artur114.bananalib.mc.BananaMC;
 import com.wonginnovations.oldresearch.api.OldResearchApi;
+import com.wonginnovations.oldresearch.common.config.OldConfig;
 import com.wonginnovations.oldresearch.common.init.InitBlocks;
 import com.wonginnovations.oldresearch.common.items.ItemResearchNote;
 import com.wonginnovations.oldresearch.common.network.PacketGivePlayerNoteToServer;
 import com.wonginnovations.oldresearch.common.research.OldResearchManager;
+import com.wonginnovations.oldresearch.common.research.ScanManager;
 import com.wonginnovations.oldresearch.common.research.storage.IOldResStorage;
 import com.wonginnovations.oldresearch.main.OldResearch;
 import net.minecraft.block.Block;
@@ -14,18 +16,25 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.items.IScribeTools;
+import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchStage;
 import thaumcraft.client.gui.GuiResearchPage;
+import thaumcraft.common.lib.SoundsTC;
 import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.lib.utils.InventoryUtils;
 
@@ -39,16 +48,47 @@ public class ASMHookOldRes {
         return InitBlocks.RESEARCH_TABLE;
     }
 
+    public static void hookScanAspectGeneric(EntityPlayer player, AspectList list) {
+        list.aspects.forEach((aspect, count) -> ScanManager.checkAndSyncAspectKnowledge(player, aspect, count));
+    }
+
+    public static boolean hookThaumometerRightClick(EntityPlayer player, EnumHand hand) {
+        if (!OldConfig.instantScans) {
+            player.setActiveHand(hand);
+            return true;
+        }
+        return false;
+    }
+
+    public static void hookThaumometerUsingTick(ItemStack stack, EntityLivingBase entity, int count) {
+        if (!(entity instanceof EntityPlayer) || OldConfig.instantScans) {
+            return;
+        }
+        EntityPlayer player = (EntityPlayer) entity;
+        if (player.world.isRemote) {
+            if (count <= 1) {
+                oldresearch$updatePickUp();
+            }
+            if (count % 5 == 0) {
+                Reflector.invokeMethod(ReflectMethods.IT_DRAW_FX, ItemsTC.thaumometer, player.world, player);
+            }
+        } else {
+            if (count <= 1) {
+                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundsTC.scan, SoundCategory.PLAYERS, 1F, 1F);
+                Reflector.invokeMethod(ReflectMethods.IT_DO_SCAN, ItemsTC.thaumometer, player.world, player);
+            }
+            if (count % 2 == 0) {
+                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundsTC.ticks, SoundCategory.PLAYERS, 0.2F, 0.45F + player.world.rand.nextFloat() * 0.1F);
+            }
+        }
+    }
+
     public static boolean hookStageContainsOnlyNotes(ResearchStage stage) {
         return Arrays.stream(stage.getResearch()).allMatch(re -> re.startsWith("rn_"));
     }
 
     public static boolean hookStageContainsNote(ResearchStage stage) {
         return Arrays.stream(stage.getResearch()).anyMatch(re -> re.startsWith("rn_"));
-    }
-
-    public static void hookAetherResearchInit() {
-
     }
 
     public static boolean hookInKnowAspect(Aspect aspect, int id) {
@@ -145,5 +185,11 @@ public class ASMHookOldRes {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void oldresearch$updatePickUp() {
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.entityRenderer.itemRenderer.resetEquippedProgress(mc.player.getActiveHand());
     }
 }
