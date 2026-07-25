@@ -33,6 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.AspectRegistryEvent;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.crafting.IDustTrigger;
 import thaumcraft.api.items.ItemsTC;
@@ -60,12 +61,10 @@ public class ManualRegister {
         this.initPatterns();
     }
 
-    public void postInit(Side side) {
-        ThaumcraftApi.registerObjectTag(new ItemStack(InitBlocks.RESEARCH_TABLE, 1, 32767), new AspectList(new ItemStack(BlocksTC.researchTable)));
-        IDustTrigger.registerDustTrigger(new DustTriggerSimple("", BlocksTC.tableWood, new ItemStack(BlocksTC.researchTable)));
-    }
+    public void postInit(Side side) {}
 
     public void loadComplete() {
+        IDustTrigger.registerDustTrigger(new DustTriggerSimple("", BlocksTC.tableWood, new ItemStack(BlocksTC.researchTable)));
         ResearchCategories.getResearchCategory("BASICS").research.remove("KNOWLEDGETYPES");
         ResearchCategories.getResearchCategory("BASICS").research.remove("THEORYRESEARCH");
         ResearchCategories.getResearchCategory("BASICS").research.remove("CELESTIALSCANNING");
@@ -112,6 +111,11 @@ public class ManualRegister {
     @SideOnly(Side.CLIENT)
     public void initTESR() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileResearchTable.class, new TileResearchTableRenderer());
+    }
+
+    @SubscribeEvent
+    public void registerAspects(AspectRegistryEvent e) {
+        e.register.registerObjectTag(new ItemStack(InitBlocks.RESEARCH_TABLE), new AspectList(new ItemStack(BlocksTC.researchTable)));
     }
 
     @SubscribeEvent
