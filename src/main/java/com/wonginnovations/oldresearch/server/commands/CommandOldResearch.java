@@ -1,6 +1,8 @@
 package com.wonginnovations.oldresearch.server.commands;
 
 import com.wonginnovations.oldresearch.api.OldResearchApi;
+import com.wonginnovations.oldresearch.common.network.PacketAspectDiscovery;
+import com.wonginnovations.oldresearch.common.network.PacketAspectPool;
 import com.wonginnovations.oldresearch.common.research.storage.IOldResStorage;
 import com.wonginnovations.oldresearch.main.OldResearch;
 import net.minecraft.command.CommandBase;
@@ -83,8 +85,8 @@ public class CommandOldResearch extends CommandBase {
                     IOldResStorage storage = OldResearchApi.oldResStorage(player);
                     for (Aspect aspect : Aspect.aspects.values()) {
                         storage.addToAspectPool(aspect, parseInt(args[3]));
+                        OldResearch.NETWORK.sendTo(new PacketAspectPool(aspect.getTag(), parseInt(args[3]), storage.aspectCount(aspect)), player);
                     }
-                    storage.sync();
                     sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully"));
                 } else {
                     Aspect aspect = Aspect.getAspect(args[2]);
@@ -94,7 +96,7 @@ public class CommandOldResearch extends CommandBase {
                     }
                     IOldResStorage storage = OldResearchApi.oldResStorage(player);
                     storage.addToAspectPool(aspect, parseInt(args[3]));
-                    storage.sync();
+                    OldResearch.NETWORK.sendTo(new PacketAspectPool(aspect.getTag(), parseInt(args[3]), storage.aspectCount(aspect)), player);
                     sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully added " + parseInt(args[3]) + " aspects " + TextFormatting.RESET + aspect.getChatcolor() + aspect));
                 }
                 break;

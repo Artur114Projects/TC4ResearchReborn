@@ -24,7 +24,7 @@ public class ItemThaumometerTransformer extends AbstractASMTransformer {
     protected ClassNodeAdv transform(IASMLogger logger, String className, ClassNodeAdv clazz) {
         boolean def = FMLLaunchHandler.isDeobfuscatedEnvironment();
         for (MethodNodeAdv node : clazz.methods) {
-            if (node.name.equals(def ? "getMaxItemUseDuration" : "func_77626_a")) {
+            if (node.name.equals("onUsingTick")) {
                 return clazz;
             }
         }

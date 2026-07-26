@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+//TODO: Сделать чтобы не пропадали после смерти
 public class OldResStorage implements IOldResStorage {
     private final Map<Aspect, Integer> aspects = new LinkedHashMap<>();
     private final EntityPlayer player;
@@ -140,6 +141,7 @@ public class OldResStorage implements IOldResStorage {
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
+        System.out.println(nbt);
         NBTTagList aspectList = nbt.getTagList("aspectList", 10);
         this.finishedNotes = nbt.getInteger("finishedNotes");
         for (int i = 0; i != aspectList.tagCount(); i++) {

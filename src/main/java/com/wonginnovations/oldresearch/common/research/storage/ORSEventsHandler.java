@@ -1,9 +1,12 @@
 package com.wonginnovations.oldresearch.common.research.storage;
 
+import com.wonginnovations.oldresearch.api.OldResearchApi;
 import com.wonginnovations.oldresearch.common.research.storage.client.ClientORSEventsManager;
 import com.wonginnovations.oldresearch.common.research.storage.server.ServerORSEventsManager;
+import com.wonginnovations.oldresearch.main.OldResearch;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -25,5 +28,20 @@ public class ORSEventsHandler {
     @SubscribeEvent
     public static void playerLogin(PlayerEvent.PlayerLoggedInEvent e) {
         if (e.player != null) SERVER_MANAGER.playerEventPlayerLoggedInEvent(e);
+    }
+
+    @SubscribeEvent
+    public static void playerRespawnEvent(PlayerEvent.PlayerRespawnEvent e) {
+        if (e.player != null) SERVER_MANAGER.playerEventPlayerRespawnEvent(e);
+    }
+
+    @SubscribeEvent
+    public static void playerChangeDimEvent(PlayerEvent.PlayerChangedDimensionEvent e) {
+        if (e.player != null) SERVER_MANAGER.playerEventPlayerChangedDimensionEvent(e);
+    }
+
+    @SubscribeEvent
+    public static void playerCloneEvent(net.minecraftforge.event.entity.player.PlayerEvent.Clone e) {
+        SERVER_MANAGER.playerEventClone(e);
     }
 }

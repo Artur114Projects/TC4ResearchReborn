@@ -46,7 +46,8 @@ public class REHNotifyHandler {
         for(float shift = -8.0F; entry < notifications.size() && entry < OldConfig.notificationMax; ++entry) {
             PlayerNotifications.Notification li = notifications.get(entry);
             String text = li.text;
-            int size = mc.fontRenderer.getStringWidth(text) / 2;
+            float s = 1;
+            int size = (int) (mc.fontRenderer.getStringWidth(text) * s);
             int alpha = 255;
             if(entry == notifications.size() - 1 && li.created > time) {
                 alpha = 255 - (int)((float)(li.created - time) / (float)(OldConfig.notificationDelay / 4) * 240.0F);
@@ -62,7 +63,7 @@ public class REHNotifyHandler {
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(770, 771);
             GlStateManager.translate((float)(k - size - 10), (float)(l - entry * 8) + shift, 0.0F);
-            GlStateManager.scale(0.5F, 0.5F, 0.5F);
+            GlStateManager.scale(s, s, s);
             mc.ingameGUI.drawString(mc.fontRenderer, text, -4, -8, color);
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();

@@ -83,18 +83,22 @@ public class ASMHookOldRes {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public static boolean hookStageContainsOnlyNotes(ResearchStage stage) {
         return Arrays.stream(stage.getResearch()).allMatch(re -> re.startsWith("rn_"));
     }
 
+    @SideOnly(Side.CLIENT)
     public static boolean hookStageContainsNote(ResearchStage stage) {
         return Arrays.stream(stage.getResearch()).anyMatch(re -> re.startsWith("rn_"));
     }
 
+    @SideOnly(Side.CLIENT)
     public static boolean hookInKnowAspect(Aspect aspect, int id) {
         return OldResearchApi.oldResStorage(Minecraft.getMinecraft().player).isKnowAspect(aspect.getComponents()[id]);
     }
 
+    @SideOnly(Side.CLIENT)
     public static int hookInitGuiPageData(AspectList knownPlayerAspects) {
         knownPlayerAspects.aspects.clear();
 
@@ -105,6 +109,7 @@ public class ASMHookOldRes {
         return MathHelper.ceil((float)knownPlayerAspects.size() / 5.0F);
     }
 
+    @SideOnly(Side.CLIENT)
     public static boolean hookMouseClicked(Map<Point, ItemStack> notePoints, int mx, int my) {
         for (Point p : notePoints.keySet()) {
             if ((mx >= p.x && mx <= p.x + 16) && (my >= p.y && my <= p.y + 16)) {
@@ -119,6 +124,7 @@ public class ASMHookOldRes {
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
     public static ResearchStage.Knowledge[] hookPagesGetKnow(ResearchStage instance) {
         if (instance.getCraft() == null && instance.getObtain() == null && instance.getResearch() == null) {
             return new ResearchStage.Knowledge[0];
@@ -126,10 +132,12 @@ public class ASMHookOldRes {
         return null;
     }
 
+    @SideOnly(Side.CLIENT)
     public static boolean hookIsResearchComplete(IPlayerKnowledge instance, String s) {
         return !"KNOWLEDGETYPES".equals(s) && instance.isResearchComplete(s);
     }
 
+    @SideOnly(Side.CLIENT)
     public static int hookRenderNotes1(Map<Point, ItemStack> notePoints, List tipText, ResourceLocation shownRecipe, boolean allowWithPagePopup, boolean[] hasResearch, ResourceLocation tex1, GuiResearchPage self, ResearchStage stage, int shift, int ss, int x, int y, int mx, int my, int i) {
         String key = stage.getResearch()[i];
 
@@ -171,6 +179,7 @@ public class ASMHookOldRes {
         return shift + ss;
     }
 
+    @SideOnly(Side.CLIENT)
     private static void oldresearch$drawPopupAt(GuiResearchPage self, ResourceLocation shownRecipe, boolean allowWithPagePopup, int x, int y, int mx, int my, String... text) {
         if ((shownRecipe == null || allowWithPagePopup) && mx >= x && my >= y && mx < x + 16 && my < y + 16) {
             List<String> tipText = new ArrayList<>();

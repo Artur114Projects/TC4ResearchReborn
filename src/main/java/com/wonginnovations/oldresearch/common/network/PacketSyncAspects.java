@@ -20,8 +20,7 @@ public class PacketSyncAspects extends NBTPacketBase {
         @Override
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(PacketSyncAspects message, MessageContext ctx) {
-            Minecraft mc = Minecraft.getMinecraft();
-            mc.addScheduledTask(() -> OldResearchApi.oldResStorage(mc.player).deserializeNBT(message.nbt));
+            Minecraft.getMinecraft().addScheduledTask(() -> OldResearchApi.oldResStorage(Minecraft.getMinecraft().player).deserializeNBT(message.nbt));
             return null;
         }
     }
