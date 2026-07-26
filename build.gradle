@@ -1,5 +1,5 @@
 plugins {
-    id 'com.gtnewhorizons.retrofuturagradle' version '1.+'
+    id 'com.gtnewhorizons.retrofuturagradle' version '2.+'
 }
 
 version = mod_version
@@ -70,4 +70,4 @@ jar {
     }
 }
 
-apply from: file("scripts/fixes.gradle")
+apply from: file("scripts/rfg.gradle")
