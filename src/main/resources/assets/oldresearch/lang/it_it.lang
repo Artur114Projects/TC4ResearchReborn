@@ -12,6 +12,7 @@ item.researchnote.unknown.2=<Click destro per rivelare>
 item.discovery.name=§dScoperta
 item.curio.basic.name=Curiosità di base
 item.curio.crimson.name=Riti cremisi
+tile.deconstruction_table.name=Tavolo della decostruzione
 
 tc.research.copy=Costo per copiare questa ricerca:
 tc.research.copy.failure=%s insufficiente per copiare la scoperta.

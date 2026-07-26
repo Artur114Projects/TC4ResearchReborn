@@ -1,4 +1,4 @@
-package com.wonginnovations.oldresearch.client.renderer;
+package com.wonginnovations.oldresearch.client.renderer.tile;
 
 import com.wonginnovations.oldresearch.common.items.ItemResearchNote;
 import com.wonginnovations.oldresearch.common.tiles.TileResearchTable;

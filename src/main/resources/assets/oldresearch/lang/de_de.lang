@@ -12,6 +12,7 @@ item.researchnote.unknown.2=<Rechtsklick zum Enthüllen>
 item.discovery.name=§dEntdeckung
 item.curio.basic.name=Grundlegende Neugier
 item.curio.crimson.name=Blutrote Riten
+tile.deconstruction_table.name=Dekonstruktionstisch
 
 tc.research.copy=Kosten zum Kopieren dieser Forschung:
 tc.research.copy.failure=Nicht genug %s, um die Entdeckung zu kopieren.

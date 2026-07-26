@@ -5,6 +5,7 @@ item.researchnote.unknown.2=<右击以揭晓>
 item.discovery.name=§d发现
 item.curio.basic.name=Basic Curiosity
 item.curio.crimson.name=血腥仪式
+tile.deconstruction_table.name=解构工作台
 #
 tc.research.copy=复制此项研究需耗费:
 tc.research.copy.failure=没有足够的 %s 来复制研究。

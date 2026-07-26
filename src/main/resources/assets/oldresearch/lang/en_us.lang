@@ -5,6 +5,7 @@ item.researchnote.unknown.2=<Right click to reveal>
 item.discovery.name=§dDiscovery
 item.curio.basic.name=Basic Curiosity
 item.curio.crimson.name=Crimson Rites
+tile.deconstruction_table.name=Deconstruction Table
 #
 itemGroup.oldresearch.creativetab=Old Research: Notes
 #
@@ -81,6 +82,10 @@ tc.aspect.help.machina=mechanical things
 tc.aspect.help.vinculum=things that entrap
 tc.aspect.help.permutatio=trading and bartering
 tc.aspect.help.corpus=flesh
+#
+research.DECONSTRUCTOR.title=Deconstruction table
+research.DECONSTRUCTOR.stage.1=There comes a point in any thaumaturge's career where he is unable to progress with research due to his lack of knowledge. <BR>One possible recourse is the Deconstruction Table. The table allows you to break down objects into their simplest parts which you can examine. There are limits however - the table breaks compound aspects into their component aspects until only primal aspects remain. During this process much knowledge is lost and at best the thaumaturge can hope for is a single piece of primal knowledge.
+research.DECONSTRUCTOR.stage.2=There comes a point in any thaumaturge's career where he is unable to progress with research due to his lack of knowledge. <BR>One possible recourse is the Deconstruction Table. The table allows you to break down objects into their simplest parts which you can examine. There are limits however - the table breaks compound aspects into their component aspects until only primal aspects remain. During this process much knowledge is lost and at best the thaumaturge can hope for is a single piece of primal knowledge.<BR>For example iron (Metallum) will be simplified into §2Terra§0 and §8Ordo§0, only one of which will have a chance of being discovered.<BR>It is also fairly slow and the fewer aspects and object has, the lower the chance to discover something.
 #
 research.RESEARCH.title=Research
 research.RESEARCH.stage.1=Before you can build most thaumaturgical items and blocks, you first need to study how to do so.<BR>There are several steps in this process, but before exploring them you'll first need a suitable area for arcane discovery.<BR>A wooden table and some scribing tools should do the trick!

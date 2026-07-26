@@ -2,9 +2,9 @@ package com.wonginnovations.oldresearch.registry;
 
 import com.artur114.bananalib.mc.cap.BananaCapStorage;
 import com.wonginnovations.oldresearch.api.OldResearchApi;
+import com.wonginnovations.oldresearch.client.renderer.tile.TileDeconstructionTableRenderer;
 import com.wonginnovations.oldresearch.common.items.ItemCurio;
-import com.wonginnovations.oldresearch.common.research.curio.BaseCurio;
-import com.wonginnovations.oldresearch.client.renderer.TileResearchTableRenderer;
+import com.wonginnovations.oldresearch.client.renderer.tile.TileResearchTableRenderer;
 import com.wonginnovations.oldresearch.common.container.OldResearchGuiHandler;
 import com.wonginnovations.oldresearch.common.init.InitBlocks;
 import com.wonginnovations.oldresearch.common.init.InitItems;
@@ -12,12 +12,15 @@ import com.wonginnovations.oldresearch.common.network.*;
 import com.wonginnovations.oldresearch.common.research.OldResearchManager;
 import com.wonginnovations.oldresearch.common.research.storage.IOldResStorage;
 import com.wonginnovations.oldresearch.common.research.storage.OldResStorage;
+import com.wonginnovations.oldresearch.common.tiles.TileDeconstructionTable;
 import com.wonginnovations.oldresearch.common.tiles.TileResearchTable;
 import com.wonginnovations.oldresearch.main.OldResearch;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -31,11 +34,14 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.AspectRegistryEvent;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.crafting.IDustTrigger;
+import thaumcraft.api.crafting.ShapedArcaneRecipe;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.common.lib.crafting.DustTriggerSimple;
@@ -46,9 +52,14 @@ import java.util.Objects;
 public class ManualRegister {
     public void preInit(Side side) {
         MinecraftForge.EVENT_BUS.register(this);
+        GameRegistry.registerTileEntity(TileDeconstructionTable.class, Objects.requireNonNull(InitBlocks.DECONSTRUCTION_TABLE.getRegistryName()));
         GameRegistry.registerTileEntity(TileResearchTable.class, Objects.requireNonNull(InitBlocks.RESEARCH_TABLE.getRegistryName()));
         this.initNetwork();
         this.initCaps();
+
+        if (side == Side.CLIENT) {
+            InitBlocks.DECONSTRUCTION_TABLE.bindItemRenderer();
+        }
     }
 
     public void midInit(Side side) {
@@ -111,6 +122,7 @@ public class ManualRegister {
     @SideOnly(Side.CLIENT)
     public void initTESR() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileResearchTable.class, new TileResearchTableRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileDeconstructionTable.class, new TileDeconstructionTableRenderer());
     }
 
     @SubscribeEvent
@@ -119,13 +131,28 @@ public class ManualRegister {
     }
 
     @SubscribeEvent
+    public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+        ResourceLocation defaultGroup = new ResourceLocation("");
+        ThaumcraftApi.addArcaneCraftingRecipe(OldResearch.loc("deconstruction_table_craft"), new ShapedArcaneRecipe(
+                defaultGroup, "DECONSTRUCTOR", 50, new AspectList().add(Aspect.ENTROPY, 1), new ItemStack(InitBlocks.DECONSTRUCTION_TABLE),
+                new String[] { " T ", "AWP", "   " },
+                'T', new ItemStack(ItemsTC.thaumometer),
+                'A', new ItemStack(Items.GOLDEN_AXE),
+                'W', new ItemStack(BlocksTC.tableWood),
+                'P', new ItemStack(Items.GOLDEN_PICKAXE)
+        ));
+    }
+
+    @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> e) {
+        e.getRegistry().register(InitBlocks.DECONSTRUCTION_TABLE.item);
         e.getRegistry().register(InitBlocks.RESEARCH_TABLE.item);
         e.getRegistry().register(InitItems.RESEARCH_NOTE);
     }
 
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> e) {
+        e.getRegistry().register(InitBlocks.DECONSTRUCTION_TABLE);
         e.getRegistry().register(InitBlocks.RESEARCH_TABLE);
     }
 
@@ -133,6 +160,7 @@ public class ManualRegister {
     @SideOnly(Side.CLIENT)
     public void registerModels(ModelRegistryEvent e) {
         ((ItemCurio) ItemsTC.curio).registerModels();
+        ModelLoader.setCustomModelResourceLocation(InitBlocks.DECONSTRUCTION_TABLE.item, 0, new ModelResourceLocation(Objects.requireNonNull(InitBlocks.DECONSTRUCTION_TABLE.item.getRegistryName()), "inventory"));
         ModelLoader.setCustomModelResourceLocation(InitBlocks.RESEARCH_TABLE.item, 0, new ModelResourceLocation(Objects.requireNonNull(InitBlocks.RESEARCH_TABLE.item.getRegistryName()), "inventory"));
         InitItems.RESEARCH_NOTE.registerModels();
     }

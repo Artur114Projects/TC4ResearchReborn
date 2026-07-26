@@ -1,0 +1,7 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": { "model": "thaumcraft:arcane_workbench" },
+    "inventory": { "model": "oldresearch:builtin_block" }
+  }
+}

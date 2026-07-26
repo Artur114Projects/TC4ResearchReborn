@@ -12,6 +12,7 @@ item.researchnote.unknown.2=<Clic derecho para revelar>
 item.discovery.name=§dDescubrimiento
 item.curio.basic.name=Curiosidad básica
 item.curio.crimson.name=Ritos carmesíes
+tile.deconstruction_table.name=Mesa de Deconstrucción
 
 tc.research.copy=Coste para copiar esta investigación:
 tc.research.copy.failure=%s insuficiente para copiar el descubrimiento.

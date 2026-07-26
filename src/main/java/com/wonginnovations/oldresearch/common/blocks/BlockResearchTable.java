@@ -1,5 +1,6 @@
 package com.wonginnovations.oldresearch.common.blocks;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Random;
 
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXGeneric;
+import thaumcraft.common.blocks.BlockTCDevice;
 import thaumcraft.common.blocks.IBlockFacingHorizontal;
 
 public class BlockResearchTable extends BlockTCDevice implements IBlockFacingHorizontal {
@@ -30,6 +33,13 @@ public class BlockResearchTable extends BlockTCDevice implements IBlockFacingHor
 
     public BlockResearchTable() {
         super(Material.WOOD, TileResearchTable.class, "research_table_old");
+        try {
+            Field field = Impl.class.getDeclaredField("registryName");
+            field.setAccessible(true);
+            field.set(this, OldResearch.loc("research_table_old"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         this.setSoundType(SoundType.WOOD);
         this.item = (ItemBlock) new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
     }
@@ -58,7 +68,7 @@ public class BlockResearchTable extends BlockTCDevice implements IBlockFacingHor
     }
 
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public @NotNull IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         IBlockState bs = this.getDefaultState();
         bs = bs.withProperty(IBlockFacingHorizontal.FACING, placer.getHorizontalFacing());
         return bs;

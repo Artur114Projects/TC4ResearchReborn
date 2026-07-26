@@ -37,6 +37,24 @@
       ]
     },
     {
+      "key": "DECONSTRUCTOR",
+      "name": "research.DECONSTRUCTOR.title",
+      "icons": [ "oldresearch:deconstruction_table" ],
+      "category": "BASICS", "location": [ 5,-3 ],
+      "parents": [ "RESEARCHEXPERTISE" ],
+      "meta": [ "ROUND" , "HIDDEN" ],
+      "stages": [
+        {
+          "text": "research.DECONSTRUCTOR.stage.1",
+          "required_knowledge":["THEORY;AUROMANCY;1"]
+        },
+        {
+          "text": "research.DECONSTRUCTOR.stage.2",
+          "recipes": ["oldresearch:deconstruction_table_craft"]
+        }
+      ]
+    },
+    {
       "key": "RESEARCHMASTERY",
       "name": "research.RESEARCHMASTERY.title",
       "icons": [ "oldresearch:textures/research/r_researcher2.png" ],

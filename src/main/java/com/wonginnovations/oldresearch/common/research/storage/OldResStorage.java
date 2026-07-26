@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-//TODO: Сделать чтобы не пропадали после смерти
 public class OldResStorage implements IOldResStorage {
     private final Map<Aspect, Integer> aspects = new LinkedHashMap<>();
     private final EntityPlayer player;

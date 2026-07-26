@@ -5,6 +5,7 @@ item.researchnote.unknown.2=<右クリックで解放>
 item.discovery.name=§d研究成果
 item.curio.basic.name=基本的好奇心
 item.curio.crimson.name=紅の儀典
+tile.deconstruction_table.name=分解テーブル
 #
 tc.research.copy=研究成果を複製するためのコスト:
 tc.research.copy.failure=複製するには %s が不足しています。
