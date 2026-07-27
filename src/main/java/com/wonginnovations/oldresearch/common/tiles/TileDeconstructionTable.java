@@ -108,17 +108,17 @@ public class TileDeconstructionTable extends TileThaumcraft implements ITickable
 
     @Override
     public int @NotNull [] getSlotsForFace(@NotNull EnumFacing side) {
-        return new int[] {0};
+        return side != EnumFacing.UP ? new int[] {0} : new int[0];
     }
 
     @Override
     public boolean canInsertItem(int index, @NotNull ItemStack itemStackIn, @NotNull EnumFacing direction) {
-        return index == 0 && this.isItemValidForSlot(0, itemStackIn);
+        return index == 0 && this.isItemValidForSlot(0, itemStackIn) && direction != EnumFacing.UP;
     }
 
     @Override
     public boolean canExtractItem(int index, @NotNull ItemStack stack, @NotNull EnumFacing direction) {
-        return index == 0 && this.isItemValidForSlot(0, stack);
+        return index == 0 && this.isItemValidForSlot(0, stack) && direction != EnumFacing.UP;
     }
 
     @Override

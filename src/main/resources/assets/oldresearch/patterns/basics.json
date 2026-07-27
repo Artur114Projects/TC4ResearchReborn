@@ -8,6 +8,13 @@
       "aspects": ["ordo", "aer", "cognitio", "sensus"]
     },
     {
+      "target": "DECONSTRUCTOR",
+      "color": "fabrico",
+      "stage": 0,
+      "complexity": 1,
+      "aspects": ["perditio", "cognitio", "fabrico"]
+    },
+    {
       "target": "RESEARCHMASTERY",
       "color": "sensus",
       "stage": 0,
@@ -20,6 +27,21 @@
       "stage": 0,
       "complexity": 5,
       "aspects": ["desiderium", "fabrico", "permutatio", "cognitio", "sensus"]
+    },
+    {
+      "target": "FLUXCLEANUP",
+      "color": "ordo",
+      "stage": 0,
+      "complexity": 3,
+      "aspects": ["ordo", "victus", "herba", "auram", "vitium"]
+    },
+    {
+      "target": "RIFTCLOSER",
+      "color": "alienis",
+      "stage": 0,
+      "complexity": 1,
+      "aspects": ["aversio", "potentia", "perditio", "vacuos", "vitium", "alienis", "auram"],
+      "hash-delta": 1
     }
   ]
 }

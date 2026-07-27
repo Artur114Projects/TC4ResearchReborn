@@ -49,7 +49,7 @@ public class ASMHookOldRes {
     }
 
     public static void hookScanAspectGeneric(EntityPlayer player, AspectList list) {
-        list.aspects.forEach((aspect, count) -> ScanManager.checkAndSyncAspectKnowledge(player, aspect, count));
+        list.aspects.forEach((aspect, count) -> ScanManager.checkAndSyncAspectKnowledge(player, aspect, (int) Math.round(count * OldConfig.aspectObtainMultiplier)));
     }
 
     public static boolean hookThaumometerRightClick(EntityPlayer player, EnumHand hand) {
