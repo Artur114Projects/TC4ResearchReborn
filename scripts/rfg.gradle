@@ -17,6 +17,5 @@ for (runTask in ['runClient', 'runServer']) {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(8)
-        vendor = JvmVendorSpec.ORACLE
     }
 }
