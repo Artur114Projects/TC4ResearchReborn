@@ -2,6 +2,7 @@ package com.wonginnovations.oldresearch.common.research;
 
 import com.google.gson.*;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import thaumcraft.api.aspects.Aspect;
@@ -34,7 +35,8 @@ public class OldResearchPattParser {
                     entry.get("target").getAsString(),
                     entry.get("stage").getAsInt(),
                     parseAspects(entry.getAsJsonArray("aspects")),
-                    entry.get("complexity").getAsInt(),
+                    MathHelper.clamp(entry.get("radius").getAsInt(), 1, 4),
+                    Math.max(0, entry.get("blanks").getAsInt()),
                     parseColor(entry.get("color")),
                     entry.has("hash-delta") ? entry.get("hash-delta").getAsInt() : 0
                 ));

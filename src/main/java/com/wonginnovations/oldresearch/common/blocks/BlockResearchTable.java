@@ -1,6 +1,7 @@
 package com.wonginnovations.oldresearch.common.blocks;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -9,20 +10,29 @@ import com.wonginnovations.oldresearch.common.tiles.TileResearchTable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXGeneric;
 import thaumcraft.common.blocks.BlockTCDevice;
@@ -42,6 +52,18 @@ public class BlockResearchTable extends BlockTCDevice implements IBlockFacingHor
         }
         this.setSoundType(SoundType.WOOD);
         this.item = (ItemBlock) new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
+    }
+
+    @Override
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+        for (int i = 0; i != list.size(); i++) {
+            ItemStack stack = list.get(i);
+            if (stack.getItem() instanceof ItemBlock && (((ItemBlock) stack.getItem()).getBlock()) == BlocksTC.researchTable) {
+                list.add(i, new ItemStack(this));
+                return;
+            }
+        }
+        list.add(new ItemStack(this));
     }
 
     @Override
@@ -90,6 +112,13 @@ public class BlockResearchTable extends BlockTCDevice implements IBlockFacingHor
             fb.setScale(0.8F + rand.nextFloat() * 0.3F, 0.3F);
             fb.setLayer(0);
             ParticleEngine.addEffect(world, fb);
+        }
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        if (Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative) {
+            tooltip.add(TextFormatting.GRAY + "(old)");
         }
     }
 

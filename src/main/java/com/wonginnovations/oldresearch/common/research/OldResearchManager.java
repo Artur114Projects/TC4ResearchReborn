@@ -292,18 +292,20 @@ public class OldResearchManager {
 
     private static ResearchNoteData computeNoteDataFromPattern(ResearchNotePattern pattern, String key) {
         ResearchNoteData data = ItemResearchNote.noteData(noteStack(key));
+        if (data == null) return null;
         Random rand = new Random((31 * pattern.seed()) + key.hashCode());
-        data.generateHexes(rand, pattern.aspects(), pattern.complexity());
+        data.generateHexes(rand, pattern.aspects(), pattern.radius(), pattern.blanks());
         return data;
     }
 
     private static ResearchNoteData computeNoteDataFromRandom(World world, String key) {
         ResearchNoteData data = ItemResearchNote.noteData(noteStack(key));
+        if (data == null) return null;
         Random rand = new Random(31 * ((31 * world.getSeed()) + key.hashCode()) + data.color);
         int complexity = getResearchComplexity(key) + data.mergedTeories;
         int complexityClamped = MathHelper.clamp(complexity, 0, 12);
         AspectList aspects = getRandomAspects(rand, complexity, Math.min(11, complexityClamped + 2));
-        data.generateHexes(rand, aspects, complexityClamped);
+        data.generateHexesFromComp(rand, aspects, complexityClamped);
         return data;
     }
 

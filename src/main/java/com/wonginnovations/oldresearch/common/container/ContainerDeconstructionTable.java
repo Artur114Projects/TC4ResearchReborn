@@ -40,12 +40,8 @@ public class ContainerDeconstructionTable extends Container {
 
     @Override
     public boolean enchantItem(@NotNull EntityPlayer player, int button) {
-        if (button == 1 && this.table.aspect != null) {
-            IOldResStorage storage = OldResearchApi.oldResStorage(player);
-            storage.addToAspectPool(this.table.aspect, 1);
-            OldResearch.NETWORK.sendTo(new PacketAspectPool(this.table.aspect.getTag(), 1, storage.aspectCount(this.table.aspect)), (EntityPlayerMP) player);
-            this.table.aspect = null;
-            this.table.syncTile(false);
+        if (button == 1) {
+            this.table.takeAspect(player);
         }
 
         return false;

@@ -6,17 +6,22 @@ import com.wonginnovations.oldresearch.main.OldResearch;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
+import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.common.blocks.BlockTCDevice;
 
 import java.lang.reflect.Field;
@@ -36,6 +41,18 @@ public class BlockDeconstructionTable extends BlockTCDevice {
         }
         this.setSoundType(SoundType.WOOD);
         this.item = (ItemBlock) new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
+    }
+
+    @Override
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+        for (int i = 0; i != list.size(); i++) {
+            ItemStack stack = list.get(i);
+            if (stack.getItem() instanceof ItemBlock && (((ItemBlock) stack.getItem()).getBlock()) == BlocksTC.arcaneWorkbench) {
+                list.add(i, new ItemStack(this));
+                return;
+            }
+        }
+        list.add(new ItemStack(this));
     }
 
     @SideOnly(Side.CLIENT)
@@ -61,7 +78,14 @@ public class BlockDeconstructionTable extends BlockTCDevice {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
-            player.openGui(OldResearch.INSTANCE, 2, world, pos.getX(), pos.getY(), pos.getZ());
+            if (player.isSneaking()) {
+                TileEntity tile = world.getTileEntity(pos);
+                if (tile instanceof TileDeconstructionTable) {
+                    return ((TileDeconstructionTable) tile).takeAspect(player);
+                }
+            } else {
+                player.openGui(OldResearch.INSTANCE, 2, world, pos.getX(), pos.getY(), pos.getZ());
+            }
         }
         return true;
     }

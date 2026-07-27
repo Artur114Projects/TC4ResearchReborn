@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import com.wonginnovations.oldresearch.api.OldResearchApi;
-import net.minecraft.entity.player.EntityPlayer;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.lib.utils.HexUtils;
 
@@ -24,8 +22,13 @@ public class ResearchNoteData {
         return this.complete;
     }
 
-    public void generateHexes(Random rand, AspectList aspects, int complexity) {
+    public void generateHexesFromComp(Random rand, AspectList aspects, int complexity) {
         int radius = 1 + Math.min(3, complexity);
+        int blanks = complexity > 1 ? complexity : 0;
+        this.generateHexes(rand, aspects, radius, blanks);
+    }
+
+    public void generateHexes(Random rand, AspectList aspects, int radius, int blanks) {
         ArrayList<HexUtils.Hex> outerRing = HexUtils.distributeRingRandomly(radius, aspects.size(), rand);
         HashMap<String, HexUtils.Hex> hexLocations = HexUtils.generateHexes(radius);
         this.aspects = aspects;
@@ -41,11 +44,10 @@ public class ResearchNoteData {
             this.hexes.put(hex.toString(), hex);
         }
 
-        if (complexity > 1) {
-            int blanks = complexity;
+        if (blanks > 0) {
             HexUtils.Hex[] temp = this.hexes.values().toArray(new HexUtils.Hex[0]);
-
-            while (blanks > 0) {
+            int falls = 0;
+            while (blanks > 0 && falls < 8) {
                 int randHex = rand.nextInt(temp.length);
                 OldResearchManager.HexEntry randEntry = this.hexEntries.get(temp[randHex].toString());
                 if (randEntry != null && randEntry.type == 0) {
@@ -64,6 +66,9 @@ public class ResearchNoteData {
                         this.hexEntries.remove(temp[randHex].toString());
                         temp = this.hexes.values().toArray(new HexUtils.Hex[0]);
                         blanks--;
+                        falls = 0;
+                    } else {
+                        falls++;
                     }
                 }
             }

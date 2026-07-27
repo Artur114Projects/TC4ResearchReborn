@@ -1,7 +1,12 @@
 package com.wonginnovations.oldresearch.common.tiles;
 
+import com.wonginnovations.oldresearch.api.OldResearchApi;
+import com.wonginnovations.oldresearch.common.network.PacketAspectPool;
+import com.wonginnovations.oldresearch.common.research.storage.IOldResStorage;
 import com.wonginnovations.oldresearch.common.util.AspectUtils;
+import com.wonginnovations.oldresearch.main.OldResearch;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -83,6 +88,21 @@ public class TileDeconstructionTable extends TileThaumcraft implements ITickable
             this.syncTile(false);
             this.markDirty();
         }
+    }
+
+    public boolean takeAspect(EntityPlayer player) {
+        if (this.aspect != null) {
+            if (!player.world.isRemote) {
+                IOldResStorage storage = OldResearchApi.oldResStorage(player);
+                storage.addToAspectPool(this.aspect, 1);
+                OldResearch.NETWORK.sendTo(new PacketAspectPool(this.aspect.getTag(), 1, storage.aspectCount(this.aspect)), (EntityPlayerMP) player);
+                this.aspect = null;
+                this.syncTile(false);
+            }
+            this.aspect = null;
+            return true;
+        }
+        return false;
     }
 
     private boolean canBreak() {

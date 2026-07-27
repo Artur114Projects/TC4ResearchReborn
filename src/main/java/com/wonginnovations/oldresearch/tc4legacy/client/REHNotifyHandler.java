@@ -7,20 +7,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class REHNotifyHandler {
     public void handleNotifications(Minecraft mc, long time, RenderGameOverlayEvent event) {
-        if(PlayerNotifications.getListAndUpdate(time).size() > 0) {
+        if(!PlayerNotifications.getListAndUpdate(time).isEmpty()) {
             this.renderNotifyHUD(event.getResolution().getScaledWidth_double(), event.getResolution().getScaledHeight_double(), time);
         }
 
-        if(PlayerNotifications.getAspectListAndUpdate(time).size() > 0) {
+        if(!PlayerNotifications.getAspectListAndUpdate(time).isEmpty()) {
             this.renderAspectHUD(event.getResolution().getScaledWidth_double(), event.getResolution().getScaledHeight_double(), time);
         }
-
     }
 
     @SideOnly(Side.CLIENT)
@@ -37,23 +37,25 @@ public class REHNotifyHandler {
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.disableAlpha();
-//        GL11.glHint(3155, 4354);
+        GL11.glHint(3155, 4354);
         int k = (int)sw;
         int l = (int)sh;
         ArrayList<PlayerNotifications.Notification> notifications = PlayerNotifications.getListAndUpdate(time);
         int entry = 0;
 
-        for(float shift = -8.0F; entry < notifications.size() && entry < OldConfig.notificationMax; ++entry) {
+        for (float shift = -8.0F; entry < notifications.size() && entry < OldConfig.notificationMax; ++entry) {
             PlayerNotifications.Notification li = notifications.get(entry);
             String text = li.text;
-            float s = 1;
-            int size = (int) (mc.fontRenderer.getStringWidth(text) * s);
+            float si = 0.03125F;
+            float st = 0.75F;
+
+            int size = (int) (mc.fontRenderer.getStringWidth(text) * st);
             int alpha = 255;
-            if(entry == notifications.size() - 1 && li.created > time) {
+            if (entry == notifications.size() - 1 && li.created > time) {
                 alpha = 255 - (int)((float)(li.created - time) / (float)(OldConfig.notificationDelay / 4) * 240.0F);
             }
 
-            if(li.expire < time + (long) OldConfig.notificationDelay) {
+            if (li.expire < time + (long) OldConfig.notificationDelay) {
                 alpha = (int)(255.0F - (float)(time + (long) OldConfig.notificationDelay - li.expire) / (float) OldConfig.notificationDelay * 240.0F);
                 shift = -8.0F * ((float)alpha / 255.0F);
             }
@@ -63,16 +65,17 @@ public class REHNotifyHandler {
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(770, 771);
             GlStateManager.translate((float)(k - size - 10), (float)(l - entry * 8) + shift, 0.0F);
-            GlStateManager.scale(s, s, s);
+            GlStateManager.scale(st, st, st);
             mc.ingameGUI.drawString(mc.fontRenderer, text, -4, -8, color);
             GlStateManager.disableBlend();
             GlStateManager.popMatrix();
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(770, 771);
-            if(li.image != null) {
+
+            if (li.image != null) {
                 GlStateManager.pushMatrix();
-                GlStateManager.translate((float)(k - 9), (float)(l - entry * 8) + shift - 6.0F, 0.0F);
-                GlStateManager.scale(0.03125F, 0.03125F, 0.03125F);
+                GlStateManager.translate((float) (k - 9), (float) (l - entry * 8) + shift - 7.0F, 0.0F);
+                GlStateManager.scale(si, si, si);
                 mc.renderEngine.bindTexture(li.image);
                 Color c = new Color(li.color);
                 GlStateManager.color((float)c.getRed() / 255.0F, (float)c.getGreen() / 255.0F, (float)c.getBlue() / 255.0F, (float)alpha / 511.0F);
@@ -80,7 +83,7 @@ public class REHNotifyHandler {
                 GlStateManager.popMatrix();
             }
 
-            if(entry == notifications.size() - 1 && li.created > time) {
+            if (entry == notifications.size() - 1 && li.created > time) {
                 float scale = (float)(li.created - time) / (float)(OldConfig.notificationDelay / 4);
                 alpha = 255 - (int)(scale * 240.0F);
                 GlStateManager.pushMatrix();
@@ -88,7 +91,7 @@ public class REHNotifyHandler {
                 GlStateManager.scale(scale, scale, scale);
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F - (float)alpha / 511.0F);
                 mc.renderEngine.bindTexture(new ResourceLocation("oldresearch", "textures/misc/particles.png"));
-                int px = 16 * ((mc.player.ticksExisted + entry * 3) % 16);
+                float px = 16 * ((mc.player.ticksExisted + mc.getRenderPartialTicks() + entry * 3) % 16);
                 UtilsFX.drawTexturedQuad(0, 0, px, 80, 16, 16, -90 - notifications.size());
                 GlStateManager.popMatrix();
             }

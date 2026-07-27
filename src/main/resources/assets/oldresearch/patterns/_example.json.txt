@@ -7,13 +7,16 @@
       "stage": 1,
       # number of the stage at which the target note is located, stage numbering starts from 0
 
-      "complexity": 10,
-      # complexity of the note, affects the size of the field and the number of missing cells, minimum 1 maximum 10
+      "radius": 3,
+      # note field radius, minimum 1 maximum 4
+
+      "blanks": 6,
+      # the number of missing cells
 
       "aspects": ["victus", "ordo", "herba", "vacuos", "volatus"],
       # a list of aspects that will be in the note, if there are more than 10 of them, then problems may begin!
 
-      "color": "sensus",
+      "color": "sensus" or 12648384,
       # research note color, accepts aspect and int
 
       "hash-delta": 1

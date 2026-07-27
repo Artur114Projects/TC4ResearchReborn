@@ -6,16 +6,18 @@ public class ResearchNotePattern {
     private final String targetResearch;
     private final int targetStage;
     private final AspectList aspects;
-    private final int complexity;
+    private final int radius;
+    private final int blanks;
     private final int hashDelta;
     private final int color;
 
-    public ResearchNotePattern(String targetResearch, int targetStage, AspectList aspects, int complexity, int color, int hashDelta) {
+    public ResearchNotePattern(String targetResearch, int targetStage, AspectList aspects, int radius, int blanks, int color, int hashDelta) {
         this.targetResearch = targetResearch;
         this.targetStage = targetStage;
         this.aspects = aspects;
-        this.complexity = complexity;
         this.hashDelta = hashDelta;
+        this.radius = radius;
+        this.blanks = blanks;
         this.color = color;
     }
 
@@ -31,11 +33,15 @@ public class ResearchNotePattern {
         return this.aspects.copy();
     }
 
-    public int complexity() {
-        return this.complexity;
+    public int radius() {
+        return this.radius;
+    }
+
+    public int blanks() {
+        return this.blanks;
     }
 
     public long seed() {
-        return 31 * ((31 * 2880321) + this.complexity) + this.hashDelta;
+        return 31 * (31 * (31 * 2880321 + this.radius) + this.blanks) + this.hashDelta;
     }
 }

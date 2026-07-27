@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 
 import thaumcraft.api.items.ItemsTC;
 
+//TODO: Переписать
 @SideOnly(Side.CLIENT)
 public class TileDeconstructionTableRenderer extends TileEntitySpecialRenderer<TileDeconstructionTable> {
     private final ModelArcaneWorkbench tableModel = new ModelArcaneWorkbench();
@@ -81,7 +82,7 @@ public class TileDeconstructionTableRenderer extends TileEntitySpecialRenderer<T
             GL11.glPushMatrix();
             GL11.glTranslatef((float)x + 0.5F, (float)y + 1.15F, (float)z + 0.5F);
             GL11.glRotatef(ticks % 360.0F, 0.0F, 1.0F, 0.0F);
-            GL11.glEnable(3042);
+            GlStateManager.enableBlend();
             GL11.glBlendFunc(770, 1);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.75F);
             ItemStack is = table.breakItem.copy();
@@ -89,7 +90,8 @@ public class TileDeconstructionTableRenderer extends TileEntitySpecialRenderer<T
             EntityItem entityitem = new EntityItem(table.getWorld(), (double)0.0F, (double)0.0F, (double)0.0F, is);
             entityitem.hoverStart = MathHelper.sin(ticks / 14.0F) * 0.2F + 0.2F;
             rendermanager.renderEntity(entityitem, (double)0.0F, (double)0.0F, (double)0.0F, 0.0F, 0.0F, false);
-            GL11.glDisable(3042);
+            GL11.glBlendFunc(770, 771);
+            GlStateManager.disableBlend();
             GL11.glPopMatrix();
         }
 
