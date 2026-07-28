@@ -45,7 +45,7 @@ import thaumcraft.common.lib.utils.HexUtils;
 import thaumcraft.common.lib.utils.InventoryUtils;
 
 public class OldResearchManager {
-    protected static final Map<String, ItemStack> NOTES = new HashMap<>();
+    protected static final Map<String, ItemStack> NOTES = new LinkedHashMap<>();
     private static final Map<String, List<String>> IMPLICIT_PARENTS = new HashMap<>();
     private static final Map<String, ResearchNotePattern> NOTE_PATTERNS = new HashMap<>();
     public static final Map<Aspect, Integer> ASPECT_COMPLEXITY = new HashMap<>();
@@ -110,6 +110,7 @@ public class OldResearchManager {
             }
         }
 
+        //TODO: Увеличить до 4 символов
         OldResearch.LOGGER.info("#################################################");
         OldResearch.LOGGER.info("#         Welcome to Old Research: Reborn!      #");
         OldResearch.LOGGER.info("#       Patched {} stages in {} researches    #", parseInt(patchedStages), parseInt(patchedResearches));
@@ -254,7 +255,7 @@ public class OldResearchManager {
         }
 
         player.inventoryContainer.detectAndSendChanges();
-        world.playSound(null, player.posX, player.posY, player.posZ, SoundsTC.learn, SoundCategory.PLAYERS, 0.75F, 1.0F);
+        world.playSound(null, player.posX, player.posY, player.posZ, SoundsTC.write, SoundCategory.PLAYERS, 0.75F, 1.0F);
     }
 
     public static boolean playerHasInc(EntityPlayer player, boolean sendMessage) {
@@ -294,7 +295,7 @@ public class OldResearchManager {
         ResearchNoteData data = ItemResearchNote.noteData(noteStack(key));
         if (data == null) return null;
         Random rand = new Random((31 * pattern.seed()) + key.hashCode());
-        data.generateHexes(rand, pattern.aspects(), pattern.radius(), pattern.blanks());
+        data.generateHexes(rand, pattern.aspects(), pattern, pattern.radius(), pattern.blanks());
         return data;
     }
 

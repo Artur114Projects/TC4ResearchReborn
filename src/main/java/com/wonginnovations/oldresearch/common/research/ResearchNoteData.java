@@ -1,9 +1,11 @@
 package com.wonginnovations.oldresearch.common.research;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.mc.BananaMC;
+import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.lib.utils.HexUtils;
 
@@ -23,13 +25,20 @@ public class ResearchNoteData {
     }
 
     public void generateHexesFromComp(Random rand, AspectList aspects, int complexity) {
-        int radius = 1 + Math.min(3, complexity);
+        int radius = 2 + Math.min(2, complexity / 3);
         int blanks = complexity > 1 ? complexity : 0;
-        this.generateHexes(rand, aspects, radius, blanks);
+        this.generateHexes(rand, aspects, null, radius, blanks);
     }
 
-    public void generateHexes(Random rand, AspectList aspects, int radius, int blanks) {
-        ArrayList<HexUtils.Hex> outerRing = HexUtils.distributeRingRandomly(radius, aspects.size(), rand);
+    public void generateHexes(Random rand, AspectList aspects, @Nullable ResearchNotePattern meta, int radius, int blanks) {
+        ArrayList<HexUtils.Hex> outerRing;
+
+        if (meta != null && meta.hasMeta("SEPARATED")) {
+            outerRing = this.distributeRingRandomlySep(radius, aspects.size(), rand);
+        } else {
+            outerRing = this.distributeRingRandomly(radius, aspects.size(), rand);
+        }
+
         HashMap<String, HexUtils.Hex> hexLocations = HexUtils.generateHexes(radius);
         this.aspects = aspects;
 
@@ -44,34 +53,86 @@ public class ResearchNoteData {
             this.hexes.put(hex.toString(), hex);
         }
 
-        if (blanks > 0) {
+        if (meta != null && (meta.hasMeta("ROUND") || meta.hasMeta("ROUNDEX"))) {
             HexUtils.Hex[] temp = this.hexes.values().toArray(new HexUtils.Hex[0]);
-            int falls = 0;
-            while (blanks > 0 && falls < 8) {
-                int randHex = rand.nextInt(temp.length);
-                OldResearchManager.HexEntry randEntry = this.hexEntries.get(temp[randHex].toString());
-                if (randEntry != null && randEntry.type == 0) {
-                    boolean doRemove = true;
-
-                    for (int n = 0; n != 6; n++) {
-                        HexUtils.Hex neighbour = temp[randHex].getNeighbour(n);
-                        OldResearchManager.HexEntry neighbourEntry = this.hexEntries.get(neighbour.toString());
-                        if (neighbourEntry != null && neighbourEntry.type == 1) {
-                            doRemove = false;
+            Set<String> ring = HexUtils.getRing(radius).stream().map(HexUtils.Hex::toString).collect(Collectors.toSet());
+            if (meta.hasMeta("ROUND")) {
+                ring.addAll(HexUtils.getRing(radius - 1).stream().map(HexUtils.Hex::toString).collect(Collectors.toSet()));
+            }
+            for (HexUtils.Hex hex : temp) {
+                if (!ring.contains(hex.toString())) {
+                    this.hexes.remove(hex.toString());
+                    this.hexEntries.remove(hex.toString());
+                }
+            }
+        } else {
+            if (blanks > 0) {
+                List<HexUtils.Hex> hexes = new LinkedList<>(this.hexes.values());
+                hexes.removeIf((hex) -> {
+                    OldResearchManager.HexEntry entry = this.hexEntries.get(hex.toString());
+                    if (entry != null && entry.type == 0) {
+                        for (int n = 0; n != 6; n++) {
+                            HexUtils.Hex neighbour = hex.getNeighbour(n);
+                            OldResearchManager.HexEntry neighbourEntry = this.hexEntries.get(neighbour.toString());
+                            if (neighbourEntry != null && neighbourEntry.type == 1) {
+                                return true;
+                            }
                         }
-                    }
 
-                    if (doRemove) {
-                        this.hexes.remove(temp[randHex].toString());
-                        this.hexEntries.remove(temp[randHex].toString());
-                        temp = this.hexes.values().toArray(new HexUtils.Hex[0]);
-                        blanks--;
-                        falls = 0;
-                    } else {
-                        falls++;
+                        return false;
+                    }
+                    return true;
+                });
+
+                for (int i = 0; i != blanks; i++) {
+                    HexUtils.Hex hex = hexes.get(rand.nextInt(hexes.size()));
+                    this.hexes.remove(hex.toString());
+                    this.hexEntries.remove(hex.toString());
+                    hexes.remove(hex);
+
+                    if (hexes.isEmpty()) {
+                        break;
                     }
                 }
             }
         }
     }
+
+    private ArrayList<HexUtils.Hex> distributeRingRandomlySep(int radius, int entries, Random random) {
+        ArrayList<HexUtils.Hex> ring = HexUtils.getRing(radius);
+        ArrayList<HexUtils.Hex> results = new ArrayList<>();
+        float spacing = (float) ring.size() / (float) (entries + 4);
+        float pos = (float) random.nextInt(ring.size());
+
+        for(int i = 0; i < entries; i++) {
+            int index = Math.round(pos);
+            results.add(ring.get(index >= ring.size() ? ring.size() - 1 : index));
+            pos += spacing;
+            if (i == 0 || i == entries / 2) {
+                pos += spacing * 2;
+            }
+            pos %= ring.size();
+        }
+
+        return results;
+    }
+
+    private ArrayList<HexUtils.Hex> distributeRingRandomly(int radius, int entries, Random random) {
+        ArrayList<HexUtils.Hex> ring = HexUtils.getRing(radius);
+        ArrayList<HexUtils.Hex> results = new ArrayList<>();
+        float spacing = (float) ring.size() / (float) entries;
+        float pos = (float)random.nextInt(ring.size());
+
+        for(int i = 0; i < entries; i++) {
+            int index = Math.round(pos);
+            results.add(ring.get(index >= ring.size() ? ring.size() - 1 : index));
+            pos += spacing;
+            if (pos >= (float)ring.size()) {
+                pos -= (float)ring.size();
+            }
+        }
+
+        return results;
+    }
+
 }

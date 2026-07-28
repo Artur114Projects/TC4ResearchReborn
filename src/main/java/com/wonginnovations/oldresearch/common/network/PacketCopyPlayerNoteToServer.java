@@ -58,10 +58,10 @@ public class PacketCopyPlayerNoteToServer implements IMessage, IMessageHandler<P
 
                 ItemStack tools = ((IInventory) te).getStackInSlot(0);
                 ItemStack note = ((IInventory) te).getStackInSlot(1);
-                if (note == null || note.isEmpty() || note.getItem() != InitItems.RESEARCH_NOTE) return;
+                if (note.isEmpty() || note.getItem() != InitItems.RESEARCH_NOTE) return;
 
                 boolean failed = false;
-                if (tools == null || tools.isEmpty()) {
+                if (tools.isEmpty()) {
                     player.sendMessage(new TextComponentString("§c" + I18n.format("researchnote.missing.tools")));
                     failed = true;
                 } else if (!((TileResearchTable) te).canConsumeInkFromTable()) {
@@ -74,8 +74,9 @@ public class PacketCopyPlayerNoteToServer implements IMessage, IMessageHandler<P
                     failed = true;
                 }
                 ResearchNoteData data = ItemResearchNote.noteData(note);
+                int cost = data.copies + 1;
                 for (Aspect aspect : data.aspects.getAspects()) {
-                    if (OldResearchApi.oldResStorage(player).aspectCount(aspect) < 1 && ((TileResearchTable) te).bonusAspects.getAmount(aspect) < 1) {
+                    if (OldResearchApi.oldResStorage(player).aspectCount(aspect) < cost && ((TileResearchTable) te).bonusAspects.getAmount(aspect) < cost) {
                         player.sendMessage(new TextComponentString("§c" + I18n.format("tc.research.copy.failure", aspect.getName())));
                         failed = true;
                     }
@@ -85,24 +86,25 @@ public class PacketCopyPlayerNoteToServer implements IMessage, IMessageHandler<P
                     InventoryUtils.consumePlayerItem(player, new ItemStack(Items.PAPER), false, true);
 
                     for (Aspect aspect : data.aspects.getAspects()) {
-                        if (OldResearchApi.oldResStorage(player).aspectCount(aspect) >= 1) {
-                            OldResearchApi.oldResStorage(player).addToAspectPool(aspect, -1);
+                        if (OldResearchApi.oldResStorage(player).aspectCount(aspect) >= cost) {
+                            OldResearchApi.oldResStorage(player).addToAspectPool(aspect, -cost);
                             OldResearch.NETWORK.sendTo(new PacketAspectPool(aspect.getTag(), 0, OldResearchApi.oldResStorage(player).aspectCount(aspect)), player);
                         } else {
-                            ((TileResearchTable) te).bonusAspects.remove(aspect, 1);
+                            ((TileResearchTable) te).bonusAspects.remove(aspect, cost);
                             player.world.notifyBlockUpdate(blockPos, world.getBlockState(blockPos), world.getBlockState(blockPos), 3);
                             te.markDirty();
                         }
                     }
 
-                    data.copies = data.copies + 1;
+                    data.copies += 1;
                     ItemResearchNote.setNoteData(note, data);
+
                     if(!player.inventory.addItemStackToInventory(note.copy())) {
                         ForgeHooks.onPlayerTossEvent(player, note.copy(), false);
                     }
 
                     player.inventoryContainer.detectAndSendChanges();
-                    world.playSound(player, blockPos, SoundsTC.write, SoundCategory.MASTER, 0.75F, 1.0F);
+                    world.playSound(null, blockPos, SoundsTC.write, SoundCategory.PLAYERS, 0.75F, 1.0F);
                 }
             }
         });

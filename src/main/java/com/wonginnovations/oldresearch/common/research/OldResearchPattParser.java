@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -38,7 +37,8 @@ public class OldResearchPattParser {
                     MathHelper.clamp(entry.get("radius").getAsInt(), 1, 4),
                     Math.max(0, entry.get("blanks").getAsInt()),
                     parseColor(entry.get("color")),
-                    entry.has("hash-delta") ? entry.get("hash-delta").getAsInt() : 0
+                    entry.has("hash-delta") ? entry.get("hash-delta").getAsInt() : 0,
+                    parseMeta(entry)
                 ));
             }
         } catch (Exception e) {
@@ -46,6 +46,21 @@ public class OldResearchPattParser {
         }
         log.info("Loaded {} note patterns from {}", patterns.size(), location);
         return patterns;
+    }
+
+    private static String[] parseMeta(JsonObject entry) {
+        if (!entry.has("meta")) {
+            return new String[0];
+        }
+
+        JsonArray array = entry.getAsJsonArray("meta");
+        String[] ret = new String[array.size()];
+
+        for (int i = 0; i != ret.length; i++) {
+            ret[i] = array.get(i).getAsString();
+        }
+
+        return ret;
     }
 
     private static int parseColor(JsonElement element) {

@@ -61,7 +61,7 @@
       "color": "praecantatio",
       "stage": 0,
       "radius": 3,
-      "blanks": 8,
+      "blanks": 4,
       "aspects": ["metallum", "potentia", "ignis", "praecantatio", "auram", "machina", "fabrico"]
     },
     {
@@ -86,7 +86,7 @@
       "color": "machina",
       "stage": 0,
       "radius": 3,
-      "blanks": 6,
+      "blanks": 4,
       "aspects": ["metallum", "machina", "fabrico", "alkimia", "ordo"]
     },
     {

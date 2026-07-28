@@ -75,7 +75,7 @@ public class ManualRegister {
     public void postInit(Side side) {}
 
     public void loadComplete() {
-        IDustTrigger.registerDustTrigger(new DustTriggerSimple("", BlocksTC.tableWood, new ItemStack(BlocksTC.researchTable)));
+        IDustTrigger.registerDustTrigger(new DustTriggerSimple("RESEARCH", BlocksTC.tableWood, new ItemStack(InitBlocks.RESEARCH_TABLE)));
         ResearchCategories.getResearchCategory("BASICS").research.remove("KNOWLEDGETYPES");
         ResearchCategories.getResearchCategory("BASICS").research.remove("THEORYRESEARCH");
         ResearchCategories.getResearchCategory("BASICS").research.remove("CELESTIALSCANNING");
@@ -113,6 +113,7 @@ public class ManualRegister {
         OldResearchApi.registerOldResearch(OldResearch.loc("patterns/eldritch"));
         OldResearchApi.registerOldResearch(OldResearch.loc("patterns/golemancy"));
         OldResearchApi.registerOldResearch(OldResearch.loc("patterns/infusion"));
+        OldResearchApi.registerOldResearch(OldResearch.loc("patterns/artifice"));
     }
 
     private void initImplicitResLinks() {
