@@ -24,10 +24,10 @@ configurations {
 dependencies {
     include('com.github.Artur114Projects.BananaLib:asm:1.0.5-betta') {transitive=false}
     include('com.github.Artur114Projects.BananaLib:util:1.0.5-betta') {transitive=false}
-    include('com.github.Artur114Projects.BananaLib:math:1.0.5-betta') {transitive=false}
 
 
     implementation 'org.jetbrains:annotations:24.0.0'
+    implementation rfg.deobf('curse.maven:thaumcraft-inventory-scanning-238003:2559089')
     implementation rfg.deobf('curse.maven:thaumcraft-223628:2629023')
     implementation rfg.deobf('curse.maven:baubles-227083:2518667')
 }

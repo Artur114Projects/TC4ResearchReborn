@@ -13,7 +13,5 @@ public interface IOldResStorage extends INBTSerializable<NBTTagCompound> {
     boolean addToAspectPool(Aspect aspect, int count);
     int aspectCount(Aspect aspect);
     AspectList aspectsPool();
-    void incrementFinishedNotes();
-    int finishedNotes();
     void sync();
 }

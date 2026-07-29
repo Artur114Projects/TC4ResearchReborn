@@ -1,23 +1,42 @@
-# TC4 Research Port
+[unfinished]
 
-[![curseforge](https://cf.way2muchnoise.eu/title/977949.svg)](https://www.curseforge.com/minecraft/mc-mods/oldresearch)
-[![modrinth](https://img.shields.io/badge/dynamic/json?labelColor=black&color=grey&label=&query=title&url=https://api.modrinth.com/v2/project/5VYBtcPj&style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAJPUExURQAAABvZahWnUha1WAYzGQlHIxvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZahvZav///9ScwmYAAADDdFJOUwAAAAAAAA8zW3uOYwIBK3rB6Pn+ml18KiGL5HEDquOIH07R/UzKz2zu+uLHIibtafWkVCMNBRqg7/RQuT8EQbvT+5ETDBSU/NAgCSdZlcQKii7mtxJY5fF/7D1SRkB+EcWh4UilOOtPMdTCR1PqN969vmGDCw7G4DSSsAcGHrSPr3bds5CEwDKoXumcZdwcG4KmjayX32A79pjOqRjIFoXynVYVgPi6qxDnL78p2obVJFquNbGZCPdyvHPZ1yhuh8s+iRzcsrEAAAABYktHRMQUDBvhAAAAB3RJTUUH5wQXDwgZWDUtiQAAAqRJREFUOMttU/k7lFEU/k4L4hsxtNAnhRgiJZOiSfbI2oJpmRFCi2kV0aaNVLTIEpVISmnf97r/WO+534yZnqfzw73vOe+559xz7rmKIoVYvLx95vj6qUSqVBW3sGrwnxsQaAwSwcDz5i9g0wxPfmFIqJCyiEgLE4vDl7iD8PGlETotIqOQahlAdJTLA5sWY5JsbNzysHiihEBWViRqRDOlgyFmJVtMq5JWJ5vhvyZlLevrEmUILKl8PihtvYWcYt6QLmNwFjjEb4SSkZnlZLO5yJzcPBg35bODwZfPZxYwWbC5sKjYzwBUkssxSg1wKNsCtHUb89vTy3GwopBxDmcJ9YdDJYB1B9t2WmUtcbtkqt18Mxsp9irsezS2VEu+uka/mqUWSrFd2VsnhLEetoZ9TFv3HwCexdUdjBWi0aH4YTuEvtoPM3/EO1nnuTpEjD2qHIM54DhR0wmA5hZySzIntyknsbZyi8IB0tp07tRpBDKfgeWsdDjHDlFGRIjnl3O0t573gcMFUBeVS1gvlxB1dOZxv0pIu9IF01UDZRdjr1SuZQhxvbvnRrmsMePmrdsrGPRaKP8OLtmn9KM7A4N3xb8yNExUb5RlZt2btpZbXajzPoYkBaDKrtADp3HkYdloo56ndgx37UcHxSP0tIWBGH9cg1nx6TJFTNhS7eCfcA1PJ+GgDbLDs2GuX3V05Ohj0xYSBGumyq/yfApw4EWTRxPJqxQvIF6+ks9Gr0d4nN+8Nbhoi+NdJEwVSc6hVNvHOUvg+5qeDxoP3GQz6x8/qXLuZ6Op7SPy+gNTnydSELabk1Z8Mbs/hlr4dbobfUgxJMS3UdXza9H33jqnA3/OH41FCZ7/l7HW8vOXiWc9GvPf06D953/T2O/EP8HBNtcH0Zm/lqFNUgTAex4AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjMtMDQtMjNUMTU6MDg6MjQrMDA6MDAE5dOaAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIzLTA0LTIzVDE1OjA4OjI0KzAwOjAwdbhrJgAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyMy0wNC0yM1QxNTowODoyNSswMDowMITaQU0AAAAASUVORK5CYII=)](https://modrinth.com/mod/oldresearch)
-[![latest release](https://img.shields.io/github/v/release/wong-innovations/TC4Research?color=6cc644)](https://github.com/Wong-Innovations/TC4Research/releases)
+# TC4 Research Port: Reborn
 
-Thaumcraft 4 research system ported to Thaumcraft 6. This includes:
+[![curse forge](https://img.shields.io/badge/TC4_Research_Port%3A_Reborn-12?style=flat&logo=curseforge&labelColor=black&color=grey)](https://www.curseforge.com/minecraft/mc-mods/oldresearchreborn)
+[![modrinth](https://img.shields.io/badge/TC4_Research_Port%3A_Reborn-12?style=flat&logo=modrinth&labelColor=black&color=grey)](https://modrinth.com/mod/oldresearchreborn)
+[![latest release](https://img.shields.io/github/v/release/Artur114Projects/TC4ResearchReborn?style=flat&logo=github&labelColor=black&color=6cc644)](https://github.com/Artur114Projects/TC4ResearchReborn/releases)
 
-- Research notes in place of theorycraft theories.
-- Research minigame for completing notes.
-- Thaumometer collects player aspects as opposed to making observations.
-- Inventory Scanning (enabled by default, toggle in config).
-- and even more beloved content from 1.7.10's thaumcraft 4.
+A maintained and heavily reworked fork of the original mod: [TC4 Research Port](https://github.com/Wong-Innovations/TC4Research)
 
-[DEMO: https://www.youtube.com/watch?v=vbq55VIuodE](https://www.youtube.com/watch?v=vbq55VIuodE)
+### Main changes
 
-DISCLAIMER: This mod is actively being developed. If you encounter what you believe to be a bug please ensure you are using the latest version of the mod before reporting it.
+- Added handcrafted research note templates for all Thaumcraft research entries.
+- Added the **Deconstruction Table**.
+- Fixed an incompatibility with **ThaumicAdditions**.
+- Multiple theories within one stage of research are combined into one complex note.
+- Improved procedural research note generation:
+  - Research note generation is now based on the world seed.
+  - Research notes can now contain up to 11 aspects.
+  - Empty cells can now generate in research notes.
+- Added translations for the following languages:
+  - Russian (`ru_ru`)
+  - German (`de_de`, machine translated)
+  - Spanish (`es_es`, machine translated)
+  - French (`fr_fr`, machine translated)
+  - Italian (`it_it`, machine translated)
+- Removed the dependency on **MixinBooter** and rewrote the CoreMod using ASM.
 
-CREDITS: A special thank you to...
-
-- YoungOnion and the CleanroomMC community for their help during my modded journey.
-- MrKono and Dawnwalker666 for contributions to localization.
-- Azanor for making such a beloved mod.
+### Other changes
+- Added an API layer; developers can now create custom note templates.
+- Reworked aspect storage to use Forge capabilities.
+- Added new configuration settings:
+      - `researchDifficultyMultiplier` complexity of the note is multiplied by this value after the calculation.
+      - `aspectObtainMultiplier` number of aspects obtained during scanning is multiplied by this value and rounded according to mathematical rules.
+- Added console commands:
+      - `/oldresearch researchaspect <player> <aspectid/all>` opens the specified aspect; "all" opens all aspects.
+      - `/oldresearch addaspect <player> <aspectid/all> <amount>` adds the specified amount to the selected aspect; "all" adds the specified amount to all aspects.
+      - `/oldresearch setaspect <player> <aspectid/all> <amount>` sets the amount of the specified aspect; "all" sets the specified number for all aspects.
+- Added a Creative tab containing all registered notes.
+- Scribing tools from any Thaumcraft add-on can now be used to create notes.
+- Graphical interface of the research table was improved.
+- Multiple fixes and improvements.

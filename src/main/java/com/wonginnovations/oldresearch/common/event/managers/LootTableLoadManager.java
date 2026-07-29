@@ -1,6 +1,9 @@
-package com.wonginnovations.oldresearch.common.event.legacy;
+package com.wonginnovations.oldresearch.common.event.managers;
 
-import net.minecraft.world.storage.loot.*;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.KilledByPlayer;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.RandomChance;
@@ -8,15 +11,11 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraft.world.storage.loot.functions.SetMetadata;
 import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thaumcraft.api.items.ItemsTC;
 
-@Mod.EventBusSubscriber
-public abstract class WorldEvents {
-
+public class LootTableLoadManager {
     private static final LootCondition[] CHANCE = new LootCondition[] { new RandomChance(0.3F) };
-
     private static final LootEntry[] SOME = new LootEntry[] {
         new LootEntryItem(
             ItemsTC.curio,
@@ -30,7 +29,6 @@ public abstract class WorldEvents {
             "knowledgefrag_chance"
         )
     };
-
     private static final LootEntry[] MORE = new LootEntry[] {
         new LootEntryItem(
             ItemsTC.curio,
@@ -45,28 +43,11 @@ public abstract class WorldEvents {
         )
     };
 
-    private static final LootEntry[] ALWAYS = new LootEntry[] {
-        new LootEntryItem(
-            ItemsTC.curio,
-            1,
-            1,
-            new LootFunction[]{
-                new SetMetadata(new LootCondition[0], new RandomValueRange(7)),
-                new SetCount(new LootCondition[0], new RandomValueRange(1,3))
-            },
-            new LootCondition[0],
-            "knowledgefrag_chance"
-        )
-    };
-
-    @SubscribeEvent
-    public static void onLootTableLoad(LootTableLoadEvent event) {
-        switch (event.getName().toString()) {
+    public void lootTableLoadEvent(LootTableLoadEvent e) {
+        switch (e.getName().toString()) {
             case "minecraft:chests/stronghold_library":
             case "minecraft:chests/end_city_treasure":
-                event.getTable().addPool(
-                        new LootPool(MORE, new LootCondition[0], new RandomValueRange(1,3), new RandomValueRange(0), "knowledgefrags")
-                );
+                e.getTable().addPool(new LootPool(MORE, new LootCondition[0], new RandomValueRange(1,3), new RandomValueRange(0), "knowledgefrags"));
                 break;
             case "minecraft:chests/nether_bridge":
             case "minecraft:chests/woodland_mansion":
@@ -79,17 +60,15 @@ public abstract class WorldEvents {
             case "minecraft:chests/abandoned_mineshaft":
             case "minecraft:chests/village_blacksmith":
             case "minecraft:fishing/treasure":
-                event.getTable().addPool(
-                    new LootPool(SOME, new LootCondition[0], new RandomValueRange(1,3), new RandomValueRange(0), "knowledgefrags")
-                );
+                e.getTable().addPool(new LootPool(SOME, new LootCondition[0], new RandomValueRange(1,3), new RandomValueRange(0), "knowledgefrags"));
                 break;
             case "thaumcraft:cultist":
-                event.getTable().addPool(
+                e.getTable().addPool(
                     new LootPool(
                         SOME,
                         new LootCondition[]{
-                            new RandomChance(0.5f),
-                            new KilledByPlayer(false)
+                                new RandomChance(0.5f),
+                                new KilledByPlayer(false)
                         },
                         new RandomValueRange(1),
                         new RandomValueRange(0),
@@ -99,5 +78,4 @@ public abstract class WorldEvents {
                 break;
         }
     }
-
 }

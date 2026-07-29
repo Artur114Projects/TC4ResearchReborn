@@ -17,8 +17,7 @@ import java.util.Map;
 public class OldResStorage implements IOldResStorage {
     private final Map<Aspect, Integer> aspects = new LinkedHashMap<>();
     private final EntityPlayer player;
-    private int finishedNotes = 0;
-    
+
     public OldResStorage(EntityPlayer player) {
         Aspect.getPrimalAspects().forEach(this::researchAspect);
         this.player = player;
@@ -104,16 +103,6 @@ public class OldResStorage implements IOldResStorage {
     }
 
     @Override
-    public void incrementFinishedNotes() {
-        this.finishedNotes++;
-    }
-
-    @Override
-    public int finishedNotes() {
-        return this.finishedNotes;
-    }
-
-    @Override
     public void sync() {
         if (!this.player.world.isRemote) {
             OldResearch.NETWORK.sendTo(new PacketSyncAspects(this), (EntityPlayerMP) this.player);
@@ -133,7 +122,6 @@ public class OldResStorage implements IOldResStorage {
         });
 
         rootTag.setTag("aspectList", aspectList);
-        rootTag.setInteger("finishedNotes", this.finishedNotes);
 
         return rootTag;
     }
@@ -142,7 +130,6 @@ public class OldResStorage implements IOldResStorage {
     public void deserializeNBT(NBTTagCompound nbt) {
         System.out.println(nbt);
         NBTTagList aspectList = nbt.getTagList("aspectList", 10);
-        this.finishedNotes = nbt.getInteger("finishedNotes");
         for (int i = 0; i != aspectList.tagCount(); i++) {
             NBTTagCompound tag = aspectList.getCompoundTagAt(i);
             this.aspects.put(Aspect.getAspect(tag.getString("aspect")), tag.getInteger("amount"));

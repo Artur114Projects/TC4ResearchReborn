@@ -54,7 +54,6 @@ public class ItemResearchNote extends Item {
         ResearchNoteData data = noteData(stack);
         if (data != null && data.isComplete() && !ThaumcraftCapabilities.getKnowledge(player).isResearchComplete(data.key)) {
             if (!world.isRemote) {
-                OldResearchApi.oldResStorage(player).incrementFinishedNotes();
                 ResearchManager.progressResearch(player, data.key);
                 world.playSound(null, player.posX, player.posY, player.posZ, SoundsTC.learn, SoundCategory.PLAYERS, 0.75F, 1.0F);
             } else {
