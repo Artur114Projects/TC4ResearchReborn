@@ -30,12 +30,12 @@ A maintained and heavily reworked fork of the original mod: [TC4 Research Port](
 - Added an API layer; developers can now create custom note templates.
 - Reworked aspect storage to use Forge capabilities.
 - Added new configuration settings:
-      - `researchDifficultyMultiplier` complexity of the note is multiplied by this value after the calculation.
-      - `aspectObtainMultiplier` number of aspects obtained during scanning is multiplied by this value and rounded according to mathematical rules.
+  - `researchDifficultyMultiplier` complexity of the note is multiplied by this value after the calculation.
+  - `aspectObtainMultiplier` number of aspects obtained during scanning is multiplied by this value and rounded according to mathematical rules.
 - Added console commands:
-      - `/oldresearch researchaspect <player> <aspectid/all>` opens the specified aspect; "all" opens all aspects.
-      - `/oldresearch addaspect <player> <aspectid/all> <amount>` adds the specified amount to the selected aspect; "all" adds the specified amount to all aspects.
-      - `/oldresearch setaspect <player> <aspectid/all> <amount>` sets the amount of the specified aspect; "all" sets the specified number for all aspects.
+  - `/oldresearch researchaspect <player> <aspectid/all>` opens the specified aspect; "all" opens all aspects.
+  - `/oldresearch addaspect <player> <aspectid/all> <amount>` adds the specified amount to the selected aspect; "all" adds the specified amount to all aspects.
+  - `/oldresearch setaspect <player> <aspectid/all> <amount>` sets the amount of the specified aspect; "all" sets the specified number for all aspects.
 - Added a Creative tab containing all registered notes.
 - Scribing tools from any Thaumcraft add-on can now be used to create notes.
 - Graphical interface of the research table was improved.
