@@ -49,6 +49,11 @@ import thaumcraft.common.lib.crafting.DustTriggerSimple;
 import java.awt.*;
 import java.util.Objects;
 
+/**
+ * Here are registered all things in the mod, manually...
+ * @author Artur114
+ * @since 1.0
+ */
 public class ManualRegister {
     public void preInit(Side side) {
         MinecraftForge.EVENT_BUS.register(this);
@@ -72,14 +77,11 @@ public class ManualRegister {
         this.initPatterns();
     }
 
-    public void postInit(Side side) {}
+    public void postInit(Side side) {
+        IDustTrigger.registerDustTrigger(new DustTriggerSimple("RESEARCH", BlocksTC.tableWood, new ItemStack(InitBlocks.RESEARCH_TABLE)));
+    }
 
     public void loadComplete() {
-        IDustTrigger.registerDustTrigger(new DustTriggerSimple("RESEARCH", BlocksTC.tableWood, new ItemStack(InitBlocks.RESEARCH_TABLE)));
-        ResearchCategories.getResearchCategory("BASICS").research.remove("KNOWLEDGETYPES");
-        ResearchCategories.getResearchCategory("BASICS").research.remove("THEORYRESEARCH");
-        ResearchCategories.getResearchCategory("BASICS").research.remove("CELESTIALSCANNING");
-        OldResearchManager.loadJsonResearchDirect(OldResearch.loc("research.json"));
         OldResearchManager.patchResearch();
         OldResearchManager.computeAspectComplexity();
         this.initImplicitResLinks();

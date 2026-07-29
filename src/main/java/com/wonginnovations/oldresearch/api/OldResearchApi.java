@@ -18,7 +18,7 @@ public class OldResearchApi {
         });
     }
 
-    public static void registerOldResearch(ResourceLocation location) {
+    public static void registerOldResearch(ResourceLocation location) {//TODO: Переделать
         OldResearchManager.registerNotePatterns(OldResearchPattParser.parse(location));
     }
 }

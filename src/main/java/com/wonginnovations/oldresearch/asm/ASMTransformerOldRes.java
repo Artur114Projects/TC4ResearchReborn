@@ -16,7 +16,7 @@ public class ASMTransformerOldRes implements IClassTransformer {
     private final ASMLoggerLog4j logger = new ASMLoggerLog4j(LogManager.getLogger("OldResearchReborn/ASM"));
     private final ASMTransformBus bus = new ASMTransformBus();
 
-    public ASMTransformerOldRes() {
+    public ASMTransformerOldRes() {//TODO: Поправить логирование
         this.bus.registerTransformer(
             new BlockTableTransformer(),
             new GuiResearchPageTransformer(),
@@ -24,7 +24,9 @@ public class ASMTransformerOldRes implements IClassTransformer {
             new ConfigItemsTransformer(),
             new ScanGenericTransformer(),
             new ItemThaumometerTransformer(),
-            new RenderEventHandlerTransformer()
+            new RenderEventHandlerTransformer(),
+            new HandlerScanSelfTransformer(),
+            new HandlerScanSlotTransformer()
         );
         this.bus.registerDownListener(((tr, e) -> {
             logger.error("An exception occurred in transformer {}", tr, e);

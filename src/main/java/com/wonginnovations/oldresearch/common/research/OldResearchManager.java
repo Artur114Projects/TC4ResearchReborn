@@ -70,6 +70,12 @@ public class OldResearchManager {
     }
 
     public static void patchResearch() {
+        ResearchCategories.getResearchCategory("BASICS").research.remove("KNOWLEDGETYPES");
+        ResearchCategories.getResearchCategory("BASICS").research.remove("THEORYRESEARCH");
+        ResearchCategories.getResearchCategory("BASICS").research.remove("CELESTIALSCANNING");//TODO: Подумать
+
+        OldResearchManager.loadJsonResearchDirect(OldResearch.loc("research.json"));
+
         int patchedStages = 0;
         int patchedResearches = 0;
         for (ResearchCategory category : ResearchCategories.researchCategories.values()) {

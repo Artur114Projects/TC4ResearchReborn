@@ -3,8 +3,6 @@ package com.wonginnovations.oldresearch.common.research;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.artur114.bananalib.math.BananaMath;
-import com.artur114.bananalib.mc.BananaMC;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.lib.utils.HexUtils;
