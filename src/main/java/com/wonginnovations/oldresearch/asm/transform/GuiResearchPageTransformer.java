@@ -68,6 +68,7 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
                 insn.varInsn(ALOAD, 4);
                 insn.invokeStatic(ASMTransformerOldRes.HOOK_CLASS, "hookStageContainsOnlyNotes", "(Lthaumcraft/api/research/ResearchStage;)Z");
                 insn.jumpInsn(IFNE, ((JumpInsnNode) interval.end()).label);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insert(interval.end(), insn.build());
             });
 
@@ -80,6 +81,7 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
                 insn.varInsn(ALOAD, 4);
                 insn.invokeStatic(ASMTransformerOldRes.HOOK_CLASS, "hookStageContainsNote", "(Lthaumcraft/api/research/ResearchStage;)Z");
                 insn.jumpInsn(IFEQ, ((JumpInsnNode) interval.end()).label);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insert(interval.end(), insn.build());
             });
 
@@ -117,6 +119,7 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
                         b.jumpInsn(GOTO, label);
                     });
 
+                    logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                     method.instructions.insertBefore(interval.start(), insn.build());
                 });
             });
@@ -188,6 +191,7 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
 
                     insn.varInsn(ISTORE, 7);
 
+                    logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                     method.instructions.insert(node, insn.build());
                 });
             });
@@ -226,22 +230,26 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
 
                 insn.then(labelNode);
 
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insertBefore(interval.start(), insn.build());
             });
 
 
             builder.thenMethodInsn(INVOKEVIRTUAL, "thaumcraft/api/research/ResearchStage", "getKnow", "()[Lthaumcraft/api/research/ResearchStage$Knowledge;", false);
             method.instructions.findPattern(builder.build()).forEach(interval -> {
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.invokeVirtual("thaumcraft/api/research/ResearchStage", "getResearch", "()[Ljava/lang/String;", false).build());
             });
 
             builder.thenFieldInsn(GETFIELD, "thaumcraft/client/gui/GuiResearchPage", "hasKnow", "[Z");
             method.instructions.findPattern(builder.build()).forEach(interval -> {
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.fieldInsn(GETFIELD, "thaumcraft/client/gui/GuiResearchPage", "hasResearch", "[Z").build());
             });
 
             builder.thenFieldInsn(PUTFIELD, "thaumcraft/client/gui/GuiResearchPage", "hasKnow", "[Z");
             method.instructions.findPattern(builder.build()).forEach(interval -> {
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.fieldInsn(PUTFIELD, "thaumcraft/client/gui/GuiResearchPage", "hasResearch", "[Z").build());
             });
         });
@@ -261,7 +269,7 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
                 insn.invokeSpecial("java/util/HashMap", "<init>", "()V");
                 insn.fieldInsn(PUTFIELD, "thaumcraft/client/gui/GuiResearchPage", "oldresearch$renderedNotes", "Ljava/util/Map;");
 
-                logger.info("Injecting patches into method {}.{}{}", className, method.name, method.desc);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insertBefore(interval.start(), insn.build());
             });
         });
@@ -271,7 +279,7 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
             InsnBuilder insn = new InsnBuilder();
             builder.thenMethodInsn(INVOKEINTERFACE, "thaumcraft/api/capabilities/IPlayerKnowledge", "isResearchComplete", "(Ljava/lang/String;)Z", true);
             method.instructions.findPattern(builder.build()).forEach(interval -> {
-                logger.info("Injecting patches into method {}.{}{}", className, method.name, method.desc);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.invokeStatic(ASMTransformerOldRes.HOOK_CLASS, "hookIsResearchComplete", "(Lthaumcraft/api/capabilities/IPlayerKnowledge;Ljava/lang/String;)Z").build());
             });
         });
@@ -281,13 +289,13 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
             InsnBuilder insn = new InsnBuilder();
             builder.thenMethodInsn(INVOKEVIRTUAL, "thaumcraft/api/research/ResearchStage", "getKnow", "()[Lthaumcraft/api/research/ResearchStage$Knowledge;", false);
             method.instructions.findPattern(builder.build()).forEach(interval -> {
-                logger.info("Injecting patches into method {}.{}{}", className, method.name, method.desc);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.invokeStatic(ASMTransformerOldRes.HOOK_CLASS, "hookPagesGetKnow", "(Lthaumcraft/api/research/ResearchStage;)[Lthaumcraft/api/research/ResearchStage$Knowledge;").build());
             });
         });
 
         clazz.findMethod(FMLLaunchHandler.isDeobfuscatedEnvironment() ? "mouseClicked" : "func_73864_a").ifPresent(method -> {
-            logger.info("Injecting patches into method {}.{}{}", className, method.name, method.desc);
+            logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
             InsnBuilder insn = new InsnBuilder();
             insn.varInsn(ALOAD, 0);
             insn.fieldInsn(GETFIELD, "thaumcraft/client/gui/GuiResearchPage", "oldresearch$renderedNotes", "Ljava/util/Map;");
@@ -319,6 +327,7 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
             builder.thenMethodInsn(INVOKEINTERFACE, "thaumcraft/api/capabilities/IPlayerKnowledge", "isResearchKnown", "(Ljava/lang/String;)Z", true);
 
             method.instructions.findPattern(builder.build()).forEach(interval -> {
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 insn.varInsn(ALOAD, 12);
                 insn.insn(ICONST_1);
                 insn.invokeStatic(ASMTransformerOldRes.HOOK_CLASS, "hookInKnowAspect", "(Lthaumcraft/api/aspects/Aspect;I)Z");
@@ -343,6 +352,7 @@ public class GuiResearchPageTransformer extends AbstractASMTransformer {
             builder.thenMethodInsn(INVOKEINTERFACE, "thaumcraft/api/capabilities/IPlayerKnowledge", "isResearchKnown", "(Ljava/lang/String;)Z", true);
 
             method.instructions.findPattern(builder.build()).forEach(interval -> {
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 insn.varInsn(ALOAD, 12);
                 insn.insn(ICONST_0);
                 insn.invokeStatic(ASMTransformerOldRes.HOOK_CLASS, "hookInKnowAspect", "(Lthaumcraft/api/aspects/Aspect;I)Z");

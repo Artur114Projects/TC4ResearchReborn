@@ -22,14 +22,14 @@ public class ConfigItemsTransformer extends AbstractASMTransformer {
             builder.thenTypeInsn(NEW, "thaumcraft/common/items/curios/ItemCurio");
             method.instructions.findPattern(builder.build(), 0).ifPresent(interval -> {
                 insn.typeInsn(NEW, "com/wonginnovations/oldresearch/common/items/ItemCurio");
-                logger.info("Injecting patches into method {}.{}{}", className, method.name, method.desc);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.build());
             });
 
             builder.thenMethodInsn(INVOKESPECIAL, "thaumcraft/common/items/curios/ItemCurio", "<init>", "()V", false);
             method.instructions.findPattern(builder.build(), 0).ifPresent(interval -> {
                 insn.invokeSpecial("com/wonginnovations/oldresearch/common/items/ItemCurio", "<init>", "()V");
-                logger.info("Injecting patches into method {}.{}{}", className, method.name, method.desc);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.build());
             });
         });

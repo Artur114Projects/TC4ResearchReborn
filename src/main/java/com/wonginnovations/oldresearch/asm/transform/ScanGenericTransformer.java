@@ -46,6 +46,7 @@ public class ScanGenericTransformer extends AbstractASMTransformer {
                 logger.info("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 insn.loadVars("A:1", "A:3");
                 insn.invokeStatic(ASMTransformerOldRes.HOOK_CLASS, "hookScanAspectGeneric", "(Lnet/minecraft/entity/player/EntityPlayer;Lthaumcraft/api/aspects/AspectList;)V");
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.build());
             });
         });

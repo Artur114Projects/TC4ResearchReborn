@@ -30,6 +30,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -72,7 +73,16 @@ public class OldResearchManager {
     public static void patchResearch() {
         ResearchCategories.getResearchCategory("BASICS").research.remove("KNOWLEDGETYPES");
         ResearchCategories.getResearchCategory("BASICS").research.remove("THEORYRESEARCH");
-        ResearchCategories.getResearchCategory("BASICS").research.remove("CELESTIALSCANNING");//TODO: Подумать
+
+        ResearchEntry scan = ResearchCategories.getResearchCategory("BASICS").research.get("CELESTIALSCANNING");
+
+        if (scan != null) {
+            scan.setDisplayColumn(2);
+            scan.setDisplayRow(-3);
+            scan.setParents(new String[] {"RESEARCH"});
+            scan.getStages()[0].setText("research.CELESTIALSCANNINGOLD.stage.1");
+            scan.setMeta(ArrayUtils.add(scan.getMeta(), ResearchEntry.EnumResearchMeta.HIDDEN));
+        }
 
         OldResearchManager.loadJsonResearchDirect(OldResearch.loc("research.json"));
 
@@ -116,24 +126,21 @@ public class OldResearchManager {
             }
         }
 
-        //TODO: Увеличить до 4 символов
         OldResearch.LOGGER.info("#################################################");
         OldResearch.LOGGER.info("#         Welcome to Old Research: Reborn!      #");
-        OldResearch.LOGGER.info("#       Patched {} stages in {} researches    #", parseInt(patchedStages), parseInt(patchedResearches));
-        OldResearch.LOGGER.info("#         And created {} research notes        #", parseInt(NOTES.size()));
+        int l = (patchedStages + "" + patchedResearches).length();
+        OldResearch.LOGGER.info("#{}     Patched {} stages in {} researches    {}#", space(4 - (l / 2)), patchedStages, patchedResearches, space(4 - (l / 2 + l % 2)));
+        l = (NOTES.size() + "").length();
+        OldResearch.LOGGER.info("#{}       And created {} research notes     {}#", space(4 - (l / 2)), NOTES.size(), space(4 - (l / 2 + l % 2)));
         OldResearch.LOGGER.info("#################################################");
     }
 
-    private static String parseInt(int i) {
-        String p = i + "";
-        switch (p.length()) {
-            case 1:
-                return " " + p + " ";
-            case 2:
-                return " " + p;
-            default:
-                return p;
+    private static String space(int count) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            builder.append(" ");
         }
+        return builder.toString();
     }
 
     private static int computeAspectComplexity(Aspect aspect, int depth) {

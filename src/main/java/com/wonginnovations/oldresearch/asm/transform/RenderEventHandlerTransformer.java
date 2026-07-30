@@ -56,6 +56,7 @@ public class RenderEventHandlerTransformer extends AbstractASMTransformer {
                 insn.fieldInsn(GETSTATIC, "thaumcraft/client/lib/events/RenderEventHandler", "thaumTarget", "Lnet/minecraft/entity/Entity;");
                 insn.invokeStatic("thaumcraft/api/research/ScanningManager", "isThingStillScannable", "(Lnet/minecraft/entity/player/EntityPlayer;Ljava/lang/Object;)Z");
                 insn.jumpInsn(IFNE, ((JumpInsnNode) interval.end()).label);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insert(interval.end(), insn.build());
             });
         });
@@ -87,6 +88,7 @@ public class RenderEventHandlerTransformer extends AbstractASMTransformer {
                 insn.invokeVirtual("net/minecraftforge/event/entity/player/ItemTooltipEvent", "getItemStack", "()Lnet/minecraft/item/ItemStack;", false);
                 insn.invokeStatic("thaumcraft/api/research/ScanningManager", "isThingStillScannable", "(Lnet/minecraft/entity/player/EntityPlayer;Ljava/lang/Object;)Z");
                 insn.jumpInsn(IFNE, ((JumpInsnNode) interval.end()).label);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insert(interval.end(), insn.build());
             });
         });
@@ -115,6 +117,7 @@ public class RenderEventHandlerTransformer extends AbstractASMTransformer {
                 insn.invokeVirtual("net/minecraftforge/client/event/RenderTooltipEvent$PostBackground", "getStack", "()Lnet/minecraft/item/ItemStack;", false);
                 insn.invokeStatic("thaumcraft/api/research/ScanningManager", "isThingStillScannable", "(Lnet/minecraft/entity/player/EntityPlayer;Ljava/lang/Object;)Z");
                 insn.jumpInsn(IFNE, ((JumpInsnNode) interval.end()).label);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insert(interval.end(), insn.build());
             });
         });

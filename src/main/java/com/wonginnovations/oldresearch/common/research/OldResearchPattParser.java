@@ -10,11 +10,29 @@ import thaumcraft.api.aspects.AspectList;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class OldResearchPattParser {
     private static final Logger log = LogManager.getLogger("OldResearchPatterns");
+    private static final Set<ResourceLocation> queue = new LinkedHashSet<>();
+
+    public static void putIntoQueue(ResourceLocation location) {
+        queue.add(location);
+    }
+
+    public static List<ResearchNotePattern> parseQueue() {
+        Map<String, ResearchNotePattern> map = new HashMap<>();
+        for (ResourceLocation loc : queue) {
+            for (ResearchNotePattern pattern : parse(loc)) {
+                if (map.containsKey(pattern.oldResKey())) {
+                    log.warn("Attempt to register some patterns to one target {}, skipping...", pattern.oldResKey());
+                } else {
+                    map.put(pattern.oldResKey(), pattern);
+                }
+            }
+        }
+        return new ArrayList<>(map.values());
+    }
 
     public static List<ResearchNotePattern> parse(ResourceLocation location) {
         JsonParser parser = new JsonParser();

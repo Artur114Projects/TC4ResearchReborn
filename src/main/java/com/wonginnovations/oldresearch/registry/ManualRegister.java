@@ -10,6 +10,7 @@ import com.wonginnovations.oldresearch.common.init.InitBlocks;
 import com.wonginnovations.oldresearch.common.init.InitItems;
 import com.wonginnovations.oldresearch.common.network.*;
 import com.wonginnovations.oldresearch.common.research.OldResearchManager;
+import com.wonginnovations.oldresearch.common.research.OldResearchPattParser;
 import com.wonginnovations.oldresearch.common.research.storage.IOldResStorage;
 import com.wonginnovations.oldresearch.common.research.storage.OldResStorage;
 import com.wonginnovations.oldresearch.common.tiles.TileDeconstructionTable;
@@ -79,6 +80,7 @@ public class ManualRegister {
 
     public void postInit(Side side) {
         IDustTrigger.registerDustTrigger(new DustTriggerSimple("RESEARCH", BlocksTC.tableWood, new ItemStack(InitBlocks.RESEARCH_TABLE)));
+        OldResearchManager.registerNotePatterns(OldResearchPattParser.parseQueue());
     }
 
     public void loadComplete() {

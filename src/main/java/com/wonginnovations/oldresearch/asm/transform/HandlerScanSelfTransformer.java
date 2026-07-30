@@ -6,8 +6,6 @@ import com.artur114.bananalib.asm.patterns.InsnPattern;
 import com.artur114.bananalib.asm.tree.ClassNodeAdv;
 import com.artur114.bananalib.asm.util.IASMLogger;
 import com.artur114.bananalib.asm.util.InsnBuilder;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
 
 public class HandlerScanSelfTransformer extends AbstractASMTransformer  {
 
@@ -35,6 +33,7 @@ public class HandlerScanSelfTransformer extends AbstractASMTransformer  {
                     insn.loadVars("A:3", "A:3");
                     insn.invokeStatic("thaumcraft/api/research/ScanningManager", "scanTheThing", "(Lnet/minecraft/entity/player/EntityPlayer;Ljava/lang/Object;)V");
                 });
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.build());
             });
         });

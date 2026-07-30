@@ -61,6 +61,7 @@ public class ItemThaumometerTransformer extends AbstractASMTransformer {
                 i.invokeSpecial("net/minecraft/util/ActionResult", "<init>", "(Lnet/minecraft/util/EnumActionResult;Ljava/lang/Object;)V");
                 i.insn(ARETURN);
             });
+            logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
             method.instructions.insert(insn.build());
         });
         
@@ -80,6 +81,7 @@ public class ItemThaumometerTransformer extends AbstractASMTransformer {
                 insn.insn(ICONST_1);
                 insn.invokeStatic("com/wonginnovations/oldresearch/common/research/ScanManager", "canScanThing", "(Lnet/minecraft/entity/player/EntityPlayer;Ljava/lang/Object;Z)Z");
                 insn.jumpInsn(IFEQ, ((JumpInsnNode) interval.end()).label);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insert(interval.end(), insn.build());
             });
 
@@ -98,6 +100,7 @@ public class ItemThaumometerTransformer extends AbstractASMTransformer {
                 insn.insn(ICONST_1);
                 insn.invokeStatic("com/wonginnovations/oldresearch/common/research/ScanManager", "canScanThing", "(Lnet/minecraft/entity/player/EntityPlayer;Ljava/lang/Object;Z)Z");
                 insn.jumpInsn(IFEQ, ((JumpInsnNode) interval.end()).label);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insert(interval.end(), insn.build());
             });
         });

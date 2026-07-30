@@ -35,6 +35,7 @@ public class HandlerScanSlotTransformer extends AbstractASMTransformer {
                     insn.loadVars("A:3", "A:6");
                     insn.invokeStatic("thaumcraft/api/research/ScanningManager", "scanTheThing", "(Lnet/minecraft/entity/player/EntityPlayer;Ljava/lang/Object;)V");
                 });
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.replace(interval, insn.build());
             });
         });

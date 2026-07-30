@@ -128,7 +128,6 @@ public class OldResStorage implements IOldResStorage {
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        System.out.println(nbt);
         NBTTagList aspectList = nbt.getTagList("aspectList", 10);
         for (int i = 0; i != aspectList.tagCount(); i++) {
             NBTTagCompound tag = aspectList.getCompoundTagAt(i);

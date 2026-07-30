@@ -41,7 +41,7 @@ public class CommandThaumcraftTransformer extends AbstractASMTransformer {
                 insn.jumpInsn(IFNE, successLabel);
                 insn.jumpInsn(GOTO, errorLabel);
 
-                logger.info("Injecting patches into method {}.{}{}", className, method.name, method.desc);
+                logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);
                 method.instructions.insert(ifnullInsn, insn.build());
             });
         });

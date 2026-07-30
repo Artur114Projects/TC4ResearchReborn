@@ -38,23 +38,12 @@ public class TileDeconstructionTableRenderer extends TileEntitySpecialRenderer<T
         RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glPushMatrix();
-        this.bindTexture(tableTex);
+        this.bindTexture(this.tableTex);
         GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0F, (float)z + 0.5F);
         GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.tableModel.renderAll();
         GL11.glPopMatrix();
-//        GL11.glPushMatrix();
-//        GL11.glTranslatef((float) x, (float) y, (float) z);
-//        GL11.glTranslatef(0.5F, 1.0F + (1.5F / 16.0F), 0.5F);
-//        GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-//        GL11.glTranslatef(0, -(10.5F / 16.0F), 0);
-//        GL11.glScalef(1.2F, 1.2F, 1.2F);
-//        GlStateManager.enableLighting();
-//        EntityItem entityitem = new EntityItem(table.getWorld(), (double)0.0F, (double)0.0F, (double)0.0F, this.tm);
-//        entityitem.hoverStart = 0.0F;
-//        rendermanager.renderEntity(entityitem, (double)0.0F, (double)0.0F, (double)0.0F, 0.0F, 0.0F, false);
-//        GL11.glPopMatrix();
 
         if (this.tmModel == null) {
             this.tmModel = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(this.tm, Minecraft.getMinecraft().world, null);
