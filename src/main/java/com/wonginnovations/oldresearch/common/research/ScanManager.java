@@ -11,6 +11,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandler;
+import thaumcraft.api.ThaumcraftInvHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectHelper;
 import thaumcraft.api.aspects.AspectList;
@@ -54,6 +58,12 @@ public class ScanManager {
     public static boolean canScanThing(EntityPlayer player, Object thing, boolean notify) {
         AspectList al = objScanAspects(player, thing);
         if (al == null || al.size() < 0) return true;
+        if (thing instanceof BlockPos) {
+            IItemHandler handler = ThaumcraftInvHelper.getItemHandlerAt(player.world, (BlockPos) thing, EnumFacing.UP);
+            if (handler != null) {
+                return false;
+            }
+        }
         for (Aspect aspect : al.getAspects()) {
             if (aspect.getComponents() != null) {
                 for (Aspect component : aspect.getComponents()) {

@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import thaumcraft.Thaumcraft;
 
 //TODO: Переписать пакеты по нормальному
-@Mod(modid = OldResearch.MODID, useMetadata = true)
+@Mod(modid = OldResearch.MODID, useMetadata = true, dependencies = "required-after:thaumcraft")
 public class OldResearch {
     public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel("oldresearch");
     public static final OldResCreativeTab CREATIVE_TAB = new OldResCreativeTab("oldresearch.creativetab");

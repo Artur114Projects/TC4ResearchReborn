@@ -4,11 +4,11 @@ import java.nio.file.StandardCopyOption
 for (runTask in ['runClient', 'runServer']) {
     tasks.named(runTask).configure {
         doFirst {
-            def jar = file("build/libs/OldResearchReborn-1.0.0-dev.jar")
+            def jar = file("build/libs/${mod_archive_name}-${mod_version}-dev.jar")
             def mods = file("run/mods").with {it.mkdirs(); it}
 
             if (jar.exists()) {
-                Files.copy(jar.toPath(), mods.toPath().resolve("OldResearchReborn-1.0.0-dev.jar"), StandardCopyOption.REPLACE_EXISTING)
+                Files.copy(jar.toPath(), mods.toPath().resolve("${mod_archive_name}-${mod_version}-dev.jar"), StandardCopyOption.REPLACE_EXISTING)
             }
         }
     }
