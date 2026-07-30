@@ -1,5 +1,3 @@
-[unfinished]
-
 # TC4 Research Port: Reborn
 
 [![curse forge](https://img.shields.io/badge/TC4_Research_Port%3A_Reborn-12?style=flat&logo=curseforge&labelColor=black&color=grey)](https://www.curseforge.com/minecraft/mc-mods/oldresearchreborn)
