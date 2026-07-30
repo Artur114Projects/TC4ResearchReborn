@@ -5,7 +5,7 @@
     "description": "Thaumcraft 4 research system ported to Thaumcraft 6.",
     "version": "${version}",
     "mcversion": "1.12.2",
-    "url": "",
+    "url": "https://github.com/Artur114Projects/TC4ResearchReborn",
     "updateUrl": "",
     "authorList": ["Artur114", "SumTingWong886", "LaSto4ka21"],
     "credits": "Authors of this project",
