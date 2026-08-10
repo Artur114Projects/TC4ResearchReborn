@@ -1,4 +1,4 @@
-package com.artur114.bananalib.mc.asm;
+package com.artur114.bananalib.mcold.asm;
 
 import com.artur114.bananalib.asm.util.IASMLogger;
 import org.apache.logging.log4j.Logger;

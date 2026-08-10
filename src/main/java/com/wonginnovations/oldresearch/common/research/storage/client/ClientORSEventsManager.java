@@ -1,6 +1,6 @@
 package com.wonginnovations.oldresearch.common.research.storage.client;
 
-import com.artur114.bananalib.mc.cap.BananaCapProvNoSave;
+import com.artur114.bananalib.mcold.cap.BananaCapProvNoSave;
 import com.wonginnovations.oldresearch.common.init.InitCapabilities;
 import com.wonginnovations.oldresearch.common.research.storage.OldResStorage;
 import com.wonginnovations.oldresearch.main.OldResearch;

@@ -1,6 +1,6 @@
 package com.wonginnovations.oldresearch.common.research;
 
-import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.bananalib.mcold.BananaMC;
 import com.artur114.bananalib.util.graphs.BananaGraphs;
 
 import java.io.InputStream;
@@ -30,7 +30,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;

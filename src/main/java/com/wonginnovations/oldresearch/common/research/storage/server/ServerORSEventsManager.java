@@ -1,6 +1,6 @@
 package com.wonginnovations.oldresearch.common.research.storage.server;
 
-import com.artur114.bananalib.mc.cap.BananaCapProv;
+import com.artur114.bananalib.mcold.cap.BananaCapProv;
 import com.wonginnovations.oldresearch.api.OldResearchApi;
 import com.wonginnovations.oldresearch.common.init.InitCapabilities;
 import com.wonginnovations.oldresearch.common.research.storage.OldResStorage;

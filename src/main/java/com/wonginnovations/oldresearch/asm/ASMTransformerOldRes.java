@@ -2,11 +2,10 @@ package com.wonginnovations.oldresearch.asm;
 
 import com.artur114.bananalib.asm.ASMTransformBus;
 import com.artur114.bananalib.asm.util.IASMLogger;
-import com.artur114.bananalib.mc.asm.ASMLoggerLog4j;
+import com.artur114.bananalib.mcold.asm.ASMLoggerLog4j;
 import com.wonginnovations.oldresearch.asm.transform.*;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.apache.logging.log4j.LogManager;
-import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.util.Textifier;
 import org.objectweb.asm.util.TraceMethodVisitor;

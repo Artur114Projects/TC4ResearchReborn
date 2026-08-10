@@ -1,6 +1,6 @@
 package com.wonginnovations.oldresearch.registry;
 
-import com.artur114.bananalib.mc.cap.BananaCapStorage;
+import com.artur114.bananalib.mcold.cap.BananaCapStorage;
 import com.wonginnovations.oldresearch.api.OldResearchApi;
 import com.wonginnovations.oldresearch.client.renderer.tile.TileDeconstructionTableRenderer;
 import com.wonginnovations.oldresearch.common.items.ItemCurio;
@@ -35,7 +35,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -44,7 +43,6 @@ import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.crafting.IDustTrigger;
 import thaumcraft.api.crafting.ShapedArcaneRecipe;
 import thaumcraft.api.items.ItemsTC;
-import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.common.lib.crafting.DustTriggerSimple;
 
 import java.awt.*;

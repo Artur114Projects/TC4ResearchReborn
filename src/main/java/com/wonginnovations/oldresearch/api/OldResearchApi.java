@@ -1,8 +1,7 @@
 package com.wonginnovations.oldresearch.api;
 
-import com.artur114.bananalib.mc.cap.BananaCaps;
+import com.artur114.bananalib.mcold.cap.BananaCaps;
 import com.wonginnovations.oldresearch.common.init.InitCapabilities;
-import com.wonginnovations.oldresearch.common.research.OldResearchManager;
 import com.wonginnovations.oldresearch.common.research.OldResearchPattParser;
 import com.wonginnovations.oldresearch.common.research.storage.IOldResStorage;
 import com.wonginnovations.oldresearch.common.research.storage.OldResStorage;

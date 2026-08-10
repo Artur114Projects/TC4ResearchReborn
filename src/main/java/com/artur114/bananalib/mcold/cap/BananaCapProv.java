@@ -1,4 +1,4 @@
-package com.artur114.bananalib.mc.cap;
+package com.artur114.bananalib.mcold.cap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
