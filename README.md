@@ -1,7 +1,7 @@
 # TC4 Research Port: Reborn
 
 [![curse forge](https://img.shields.io/badge/TC4_Research_Port%3A_Reborn-12?style=flat&logo=curseforge&labelColor=black&color=grey)](https://www.curseforge.com/minecraft/mc-mods/oldresearchreborn)
-[![modrinth](https://img.shields.io/badge/TC4_Research_Port%3A_Reborn-12?style=flat&logo=modrinth&labelColor=black&color=grey)](https://modrinth.com/mod/oldresearchreborn)
+[![modrinth](https://img.shields.io/badge/TC4_Research_Port%3A_Reborn-12?style=flat&logo=modrinth&labelColor=black&color=grey)](https://modrinth.com/mod/tc4researchportreborn)
 [![latest release](https://img.shields.io/github/v/release/Artur114Projects/TC4ResearchReborn?style=flat&logo=github&labelColor=black&color=6cc644)](https://github.com/Artur114Projects/TC4ResearchReborn/releases)
 
 A maintained and heavily reworked fork of the original mod: [TC4 Research Port](https://github.com/Wong-Innovations/TC4Research)
