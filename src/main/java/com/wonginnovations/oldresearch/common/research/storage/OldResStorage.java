@@ -1,6 +1,7 @@
 package com.wonginnovations.oldresearch.common.research.storage;
 
 import com.wonginnovations.oldresearch.common.network.PacketSyncAspects;
+import com.wonginnovations.oldresearch.common.research.OldResearchManager;
 import com.wonginnovations.oldresearch.main.OldResearch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -19,7 +20,7 @@ public class OldResStorage implements IOldResStorage {
     private final EntityPlayer player;
 
     public OldResStorage(EntityPlayer player) {
-        Aspect.getPrimalAspects().forEach(this::researchAspect);
+        OldResearchManager.PRIMAL_ASPECTS.forEach(this::researchAspect);
         this.player = player;
     }
 

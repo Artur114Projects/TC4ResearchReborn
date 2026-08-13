@@ -1,5 +1,6 @@
 package com.wonginnovations.oldresearch.common.items;
 
+import com.wonginnovations.oldresearch.common.research.OldResearchManager;
 import com.wonginnovations.oldresearch.common.research.curio.BaseCurio;
 import com.wonginnovations.oldresearch.common.research.curio.RitesCurio;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -40,7 +41,7 @@ public class ItemCurio extends thaumcraft.common.items.curios.ItemCurio {
         this.curios.add((new BaseCurio("twisted")).setCategory("ARTIFICE"));
         this.curios.add(new RitesCurio());
         BaseCurio basic = new BaseCurio("basic");
-        for (Aspect aspect : Aspect.getPrimalAspects()) basic.aspect(aspect, 15);
+        for (Aspect aspect : OldResearchManager.PRIMAL_ASPECTS) basic.aspect(aspect, 15);
         this.curios.add(basic);
     }
 

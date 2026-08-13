@@ -45,10 +45,11 @@ import thaumcraft.common.lib.utils.HexUtils;
 import thaumcraft.common.lib.utils.InventoryUtils;
 
 public class OldResearchManager {
+    public static final List<Aspect> PRIMAL_ASPECTS = Collections.unmodifiableList(Arrays.asList(Aspect.AIR, Aspect.EARTH, Aspect.FIRE, Aspect.WATER, Aspect.ORDER, Aspect.ENTROPY));
     protected static final Map<String, ItemStack> NOTES = new LinkedHashMap<>();
     private static final Map<String, List<String>> IMPLICIT_PARENTS = new HashMap<>();
     private static final Map<String, ResearchNotePattern> NOTE_PATTERNS = new HashMap<>();
-    public static final Map<Aspect, Integer> ASPECT_COMPLEXITY = new HashMap<>();
+    public static final Map<Aspect, Integer> ASPECT_COMPLEXITY = new LinkedHashMap<>();
     private static final Random RANDOM = new Random();
 
     public static void registerNotePattern(ResearchNotePattern pattern) {
@@ -64,8 +65,11 @@ public class OldResearchManager {
     }
 
     public static void computeAspectComplexity() {
+        HashSet<String> blackList = new HashSet<>(Arrays.asList(OldConfig.aspectBlackList));
         for (Aspect aspect : Aspect.aspects.values()) {
-            ASPECT_COMPLEXITY.put(aspect, computeAspectComplexity(aspect, 0));
+            if (blackList.contains(aspect.getTag())) continue;
+            int comp = computeAspectComplexity(aspect, 0);
+            if (comp != -1) ASPECT_COMPLEXITY.put(aspect, comp);
         }
     }
 
@@ -143,7 +147,12 @@ public class OldResearchManager {
     }
 
     private static int computeAspectComplexity(Aspect aspect, int depth) {
-        if (aspect.isPrimal()) return depth;
+        if (aspect.isPrimal()) {
+            if (!PRIMAL_ASPECTS.contains(aspect)) {
+                return -1;
+            }
+            return depth;
+        }
         ArrayList<Integer> childDepths = new ArrayList<>();
         for (Aspect asp : aspect.getComponents()) {
             childDepths.add(computeAspectComplexity(asp, depth + 1));
