@@ -67,9 +67,10 @@ public class OldResearchManager {
     public static void computeAspectComplexity() {
         HashSet<String> blackList = new HashSet<>(Arrays.asList(OldConfig.aspectBlackList));
         for (Aspect aspect : Aspect.aspects.values()) {
-            if (blackList.contains(aspect.getTag())) continue;
-            int comp = computeAspectComplexity(aspect, 0);
-            if (comp != -1) ASPECT_COMPLEXITY.put(aspect, comp);
+            int comp = 0;
+            if (blackList.contains(aspect.getTag())) comp = -1;
+            if (comp != -1) comp = computeAspectComplexity(aspect, 0);
+            ASPECT_COMPLEXITY.put(aspect, comp);
         }
     }
 
@@ -188,7 +189,7 @@ public class OldResearchManager {
     public static AspectList getRandomAspects(Random rand, int maxComplexity, int quantity) {
         List<Aspect> possible = ASPECT_COMPLEXITY.keySet().stream().filter(aspect -> {
             int comp = ASPECT_COMPLEXITY.get(aspect);
-            return comp <= maxComplexity && comp >= MathHelper.clamp((maxComplexity / 4) - 2, 0, 2);
+            return comp != -1 && comp <= maxComplexity && comp >= MathHelper.clamp((maxComplexity / 4) - 2, 0, 2);
         }).collect(Collectors.toList());
         AspectList selected = new AspectList();
         int upto = Math.min(quantity, possible.size());
