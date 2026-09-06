@@ -332,7 +332,7 @@ public class GuiResearchTable extends GuiContainer {
         GlStateManager.pushMatrix();
         GlStateManager.alphaFunc(516, 0.003921569F);
         GlStateManager.enableBlend();
-        UtilsFX.bindTexture("textures/gui/hex1.png");
+        this.mc.renderEngine.bindTexture(OldResearch.thaumLoc("textures/gui/hex1.png"));
         GlStateManager.color(1.0F, 1.0F, 1.0F, 0.25F);
         HexUtils.Pixel pix = hex.toPixel(HEX_SIZE);
         GlStateManager.translate((double)x + pix.x, (double)y + pix.y, 0.0D);
@@ -354,7 +354,7 @@ public class GuiResearchTable extends GuiContainer {
         GlStateManager.alphaFunc(516, 0.003921569F);
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(770, 1);
-        UtilsFX.bindTexture("textures/gui/hex2.png");
+        this.mc.renderEngine.bindTexture(OldResearch.thaumLoc("textures/gui/hex2.png"));
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         HexUtils.Pixel pix = hex.toPixel(HEX_SIZE);
         GlStateManager.translate((double)x + pix.x, (double)y + pix.y, 0.0D);
@@ -448,7 +448,7 @@ public class GuiResearchTable extends GuiContainer {
                 this.drawLine((double)(x + 169) + p1.x, (double)(y + 83) + p1.y, (double)(x + 169) + p2.x, (double)(y + 83) + p2.y);
             }
 
-            UtilsFX.bindTexture("textures/gui/hex1.png");
+            this.mc.renderEngine.bindTexture(OldResearch.thaumLoc("textures/gui/hex1.png"));
             GlStateManager.pushMatrix();
             if(!this.tileEntity.note.isComplete()) {
                 for(HexUtils.Hex hex : this.tileEntity.note.hexes.values()) {
@@ -520,7 +520,7 @@ public class GuiResearchTable extends GuiContainer {
 
     private void drawRune(double x, double y, int rune, float alpha) {
         GlStateManager.pushMatrix();
-        UtilsFX.bindTexture("textures/misc/script.png");
+        mc.renderEngine.bindTexture(new ResourceLocation("thaumcraft", "textures/misc/script.png"));
         GlStateManager.color(0.0F, 0.0F, 0.0F, alpha);
         GlStateManager.translate(x, y, 0.0D);
         if(rune < 16) {
@@ -704,7 +704,7 @@ public class GuiResearchTable extends GuiContainer {
 //        }
 
         GlStateManager.pushMatrix();
-        UtilsFX.bindTexture("textures/misc/particles.png");
+        mc.renderEngine.bindTexture(new ResourceLocation("thaumcraft", "textures/misc/particles.png"));
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.translate(x, y, 0.0D);
         Tessellator tessellator = new Tessellator();
@@ -716,10 +716,10 @@ public class GuiResearchTable extends GuiContainer {
         tessellator.startDrawingQuads();
         tessellator.setBrightness(240);
         tessellator.setColorRGBA_F(red, green, blue, 1.0F);
-        tessellator.addVertexWithUV(0.0D, 16.0D, this.zLevel, var9, var11);
-        tessellator.addVertexWithUV(16.0D, 16.0D, this.zLevel, var9, var10);
-        tessellator.addVertexWithUV(16.0D, 0.0D, this.zLevel, var8, var10);
-        tessellator.addVertexWithUV(0.0D, 0.0D, this.zLevel, var8, var11);
+        tessellator.addVertexWithUV(0.0D, 16.0D, this.zLevel, var9 / 4.0F, var11 / 4.0F);
+        tessellator.addVertexWithUV(16.0D, 16.0D, this.zLevel, var9 / 4.0F, var10 / 4.0F);
+        tessellator.addVertexWithUV(16.0D, 0.0D, this.zLevel, var8 / 4.0F, var10 / 4.0F);
+        tessellator.addVertexWithUV(0.0D, 0.0D, this.zLevel, var8 / 4.0F, var11 / 4.0F);
         tessellator.draw();
         GlStateManager.popMatrix();
     }

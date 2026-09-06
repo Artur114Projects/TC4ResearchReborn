@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -234,10 +235,10 @@ public class UtilsFX extends thaumcraft.client.lib.UtilsFX {
 
             if (bonus > 0) {
                 GlStateManager.pushMatrix();
-                mc.renderEngine.bindTexture(new ResourceLocation("oldresearch", "textures/misc/particles.png"));
+                mc.renderEngine.bindTexture(new ResourceLocation("thaumcraft", "textures/misc/particles.png"));
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 int px = 16 * (mc.player.ticksExisted % 16);
-                drawTexturedQuad((float)((int)x - 4), (float)((int)y - 4), (float)px, 80.0F, 16.0F, 16.0F, z);
+                drawTexturedQuad1024((float)((int)x - 4), (float)((int)y - 4), (float)px, 80.0F, 16.0F, 16.0F, z);
                 if (bonus > 1) {
                     float q = 0.5F;
                     if (!ModConfig.CONFIG_GRAPHICS.largeTagText) {
@@ -269,4 +270,16 @@ public class UtilsFX extends thaumcraft.client.lib.UtilsFX {
         }
     }
 
+    public static void drawTexturedQuad1024(float xCoord, float yCoord, float minU, float minV, float maxU, float maxV, double zLevel) {
+        float xs = 1.0F / 1024.0F;
+        float ys = 1.0F / 1024.0F;
+        net.minecraft.client.renderer.Tessellator tessellator = net.minecraft.client.renderer.Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos(xCoord + 0.0F, yCoord + maxV, zLevel).tex(minU * xs, (minV + maxV) * ys).endVertex();
+        bufferbuilder.pos(xCoord + maxU, yCoord + maxV, zLevel).tex((minU + maxU) * xs, (minV + maxV) * ys).endVertex();
+        bufferbuilder.pos(xCoord + maxU, yCoord + 0.0F, zLevel).tex((minU + maxU) * xs, minV * ys).endVertex();
+        bufferbuilder.pos(xCoord + 0.0F, yCoord + 0.0F, zLevel).tex(minU * xs, minV * ys).endVertex();
+        tessellator.draw();
+    }
 }

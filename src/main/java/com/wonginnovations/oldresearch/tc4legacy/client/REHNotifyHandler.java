@@ -92,7 +92,7 @@ public class REHNotifyHandler {
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F - (float)alpha / 511.0F);
                 mc.renderEngine.bindTexture(new ResourceLocation("oldresearch", "textures/misc/particles.png"));
                 float px = 16 * ((mc.player.ticksExisted + mc.getRenderPartialTicks() + entry * 3) % 16);
-                UtilsFX.drawTexturedQuad(0, 0, px, 80, 16, 16, -90 - notifications.size());
+                UtilsFX.drawTexturedQuad1024(0, 0, px, 80, 16, 16, -90 - notifications.size());
                 GlStateManager.popMatrix();
             }
         }
