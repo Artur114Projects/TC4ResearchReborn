@@ -78,7 +78,6 @@ jar {
         )
     }
     finalizedBy tasks.shadowJar
-    setEnabled false
 }
 
 apply from: file("scripts/rfg.gradle")
